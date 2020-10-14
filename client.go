@@ -55,7 +55,7 @@ func pym(conn *grpc.ClientConn){
 		}
 
 		log.Printf("Response from Server: %s", response.Id)
-		time.Sleep(2 * time.Second)
+		//time.Sleep(2 * time.Second)
 	}
 }
 
@@ -68,7 +68,7 @@ func ret(conn *grpc.ClientConn){
 
 	r := csv.NewReader(f)
 	r.Comma = ','
-	r.FieldsPerRecord = 6
+	r.FieldsPerRecord = 5
 
 	if _, err := r.Read(); err != nil{
 		panic(err)
@@ -101,7 +101,7 @@ func ret(conn *grpc.ClientConn){
 		}
 
 		log.Printf("Response from Server: %s", response.Id)
-		time.Sleep(2 * time.Second)
+		//time.Sleep(2 * time.Second)
 	}
 }
 
