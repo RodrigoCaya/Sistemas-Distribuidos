@@ -135,6 +135,10 @@ func main() {
 				var tiempo1 string 	  
 				fmt.Scanln(&tiempo1)
 				i, err := strconv.Atoi(tiempo1)
+				if err != nil{
+					log.Printf("error al procesar el propietario: %v", err)
+					continue
+				}
 				pym(conn,i)
 				break
 			}
@@ -143,6 +147,10 @@ func main() {
 				var tiempo2 string 	  
 				fmt.Scanln(&tiempo2)
 				i, err := strconv.Atoi(tiempo2)
+				if err != nil{
+					log.Printf("error al procesar el propietario: %v", err)
+					continue
+				}
 				ret(conn,i)
 				break
 			}
