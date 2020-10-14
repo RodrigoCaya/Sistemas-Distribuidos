@@ -7,6 +7,10 @@
 package helloworld
 
 import (
+	context "context"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -145,4 +149,84 @@ func file_helloworld_helloworld_proto_init() {
 	file_helloworld_helloworld_proto_rawDesc = nil
 	file_helloworld_helloworld_proto_goTypes = nil
 	file_helloworld_helloworld_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// HelloworldServiceClient is the client API for HelloworldService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type HelloworldServiceClient interface {
+	SayHello(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error)
+}
+
+type helloworldServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewHelloworldServiceClient(cc grpc.ClientConnInterface) HelloworldServiceClient {
+	return &helloworldServiceClient{cc}
+}
+
+func (c *helloworldServiceClient) SayHello(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error) {
+	out := new(Message)
+	err := c.cc.Invoke(ctx, "/helloworld.HelloworldService/SayHello", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// HelloworldServiceServer is the server API for HelloworldService service.
+type HelloworldServiceServer interface {
+	SayHello(context.Context, *Message) (*Message, error)
+}
+
+// UnimplementedHelloworldServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedHelloworldServiceServer struct {
+}
+
+func (*UnimplementedHelloworldServiceServer) SayHello(context.Context, *Message) (*Message, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+}
+
+func RegisterHelloworldServiceServer(s *grpc.Server, srv HelloworldServiceServer) {
+	s.RegisterService(&_HelloworldService_serviceDesc, srv)
+}
+
+func _HelloworldService_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Message)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HelloworldServiceServer).SayHello(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/helloworld.HelloworldService/SayHello",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HelloworldServiceServer).SayHello(ctx, req.(*Message))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _HelloworldService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "helloworld.HelloworldService",
+	HandlerType: (*HelloworldServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "SayHello",
+			Handler:    _HelloworldService_SayHello_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "helloworld/helloworld.proto",
 }
