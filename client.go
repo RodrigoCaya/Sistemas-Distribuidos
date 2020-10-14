@@ -49,24 +49,24 @@ func pym(conn *grpc.ClientConn){
 			log.Printf("error leyendo la linea: %v", err)
 		}
 
-		msj := pymes{
-			id: record[0],
-			producto: record[1],
-			valor: record[2],
-			tienda: record[3],
-			destino: record[4],
-			propietario: record[5],
-		}
+		// msj := pymes{
+		// 	id: record[0],
+		// 	producto: record[1],
+		// 	valor: record[2],
+		// 	tienda: record[3],
+		// 	destino: record[4],
+		// 	propietario: record[5],
+		// }
 
 		c := helloworld.NewHelloworldServiceClient(conn)
 		
 		message := helloworld.Message{
-			Id: msj.id,
-			Producto: msj.producto,
-			Valor: msj.valor,
-			Tienda: msj.tienda,
-			Destino: msj.destino,
-			Propietario: msj.propietario,
+			Id: record[0],
+			Producto: record[1],
+			Valor: record[2],
+			Tienda: record[3],
+			Destino: record[4],
+			Propietario: record[5],
 		}
 
 		response, err := c.SayHello(context.Background(), &message)
