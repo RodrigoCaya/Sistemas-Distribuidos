@@ -21,12 +21,8 @@ type pymes struct {
 	propietario string
 }
 
-func pym() pymes{
-	f, err := os.Open("pymes/pymes.csv")
-	if err != nil{
-		log.Printf("error abriendo el archivo: %v", err)
-	}
-	defer f.Close()
+func pym(f *os.File) pymes{
+	
 	r := csv.NewReader(f)
 	r.Comma = ','
 	r.FieldsPerRecord = 6
@@ -66,8 +62,14 @@ func main() {
 
 	//leer pymes
 	
+	f, err := os.Open("pymes/pymes.csv")
+	if err != nil{
+		log.Printf("error abriendo el archivo: %v", err)
+	}
+	defer f.Close()
+
 	for{
-		msj := pym()
+		msj := pym(f)
 
 		c := helloworld.NewHelloworldServiceClient(conn)
 		
