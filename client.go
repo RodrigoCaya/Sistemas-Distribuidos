@@ -21,37 +21,8 @@ type pymes struct {
 	propietario string
 }
 
-func pym(record []string, err error) pymes{
-	
-	//var pyme []pymes
-	//for
-		
-		if err != nil {
-			log.Printf("error leyendo la linea: %v", err)
-		}
 
-		p := pymes{
-			id: record[0],
-			producto: record[1],
-			valor: record[2],
-			tienda: record[3],
-			destino: record[4],
-			propietario: record[5],
-		}
-
-		//pyme = append(pyme, p)
-
-	return(p)
-}
-
-func main() {
-	var conn *grpc.ClientConn
-	conn, err := grpc.Dial("dist14:9000", grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("could not connect: %s", err)
-	}
-	defer conn.Close()
-
+func pym(conn *grpc.ClientConn){
 	//leer pymes
 	
 	f, err := os.Open("pymes/pymes.csv")
@@ -73,7 +44,19 @@ func main() {
 		if err == io.EOF {
 			break
 		}
-		msj := pym(record, err)
+
+		if err != nil {
+			log.Printf("error leyendo la linea: %v", err)
+		}
+
+		msj := pymes{
+			id: record[0],
+			producto: record[1],
+			valor: record[2],
+			tienda: record[3],
+			destino: record[4],
+			propietario: record[5],
+		}
 
 		c := helloworld.NewHelloworldServiceClient(conn)
 		
@@ -94,4 +77,16 @@ func main() {
 		log.Printf("Response from Server: %s", response.Id)
 		time.Sleep(2 * time.Second)
 	}
+}
+
+
+func main() {
+	var conn *grpc.ClientConn
+	conn, err := grpc.Dial("dist14:9000", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("could not connect: %s", err)
+	}
+	defer conn.Close()
+	pym(conn)
+	
 }
