@@ -12,15 +12,6 @@ import (
 	"github.com/RodrigoCaya/Sistemas-Distribuidos/helloworld"
 )
 
-type pymes struct {
-	id string
-	producto string
-	valor string
-	tienda string
-	destino string
-	propietario string
-}
-
 
 func pym(conn *grpc.ClientConn){	
 	f, err := os.Open("pymes/pymes.csv")
@@ -101,7 +92,7 @@ func ret(conn *grpc.ClientConn){
 			Valor: record[2],
 			Tienda: record[3],
 			Destino: record[4],
-			Propietario: record[5],
+			Propietario: "",
 		}
 
 		response, err := c.SayHello(context.Background(), &message)
