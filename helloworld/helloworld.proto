@@ -2,7 +2,12 @@ syntax = "proto3";
 package helloworld;
 
 message Message {
-	string body = 1;
+	string id = 1;
+	string producto = 2;
+	string valor = 3;
+	string tienda = 4;
+	string destino = 5;
+	string propietario = 6;
 }
 
 service HelloworldService {

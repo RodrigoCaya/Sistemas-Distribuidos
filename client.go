@@ -18,19 +18,18 @@ import (
 type pymes struct {
 	id string
 	producto string
-	valor int
+	valor string
 	tienda string
 	destino string
-	propietario int
+	propietario string
 }
 
-func pym(){
+func pym() []pymes{
 	f, err := os.Open("pymes/pymes.csv")
 	if err != nil{
 		log.Printf("error abriendo el archivo: %v", err)
 	}
 	defer f.Close()
-
 	r := csv.NewReader(f)
 	r.Comma = ','
 	r.FieldsPerRecord = 6
@@ -38,10 +37,8 @@ func pym(){
 	if _, err := r.Read(); err != nil{
 		panic(err)
 	}
-
-
 	var pyme []pymes
-	for {
+	//for
 		record, err := r.Read()
 		if err == io.EOF {
 			break
@@ -76,8 +73,8 @@ func pym(){
 		}
 
 		pyme = append(pyme, p)
-	}
-	fmt.Println(pyme)
+
+	return(pyme)
 }
 
 func main() {
@@ -88,10 +85,19 @@ func main() {
 	}
 	defer conn.Close()
 
+	//leer pymes
+	
+	msj := pym()
+
 	c := helloworld.NewHelloworldServiceClient(conn)
 	
 	message := helloworld.Message{
-		Body: "hola jean",
+		id: msj.id,
+		producto: msj.producto,
+		valor: msj.valor,
+		tienda: msj.tienda,
+		destino: msj.destino,
+		propietario: msj.propietario,
 	}
 
 	response, err := c.SayHello(context.Background(), &message)
@@ -100,5 +106,6 @@ func main() {
 	}
 
 	log.Printf("Response from Server: %s", response.Body)
+
 	
 }
