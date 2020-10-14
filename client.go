@@ -21,16 +21,9 @@ type pymes struct {
 	propietario string
 }
 
-func pym(f *os.File) pymes{
+func pym(r *csv.Reader) pymes{
 	
-	r := csv.NewReader(f)
-	r.Comma = ','
-	r.FieldsPerRecord = 6
-
-	if _, err := r.Read(); err != nil{
-		panic(err)
-	}
-	var pyme []pymes
+	//var pyme []pymes
 	//for
 		record, err := r.Read()
 
@@ -47,7 +40,7 @@ func pym(f *os.File) pymes{
 			propietario: record[5],
 		}
 
-		pyme = append(pyme, p)
+		//pyme = append(pyme, p)
 
 	return(p)
 }
@@ -68,8 +61,16 @@ func main() {
 	}
 	defer f.Close()
 
+	r := csv.NewReader(f)
+	r.Comma = ','
+	r.FieldsPerRecord = 6
+
+	if _, err := r.Read(); err != nil{
+		panic(err)
+	}
+
 	for{
-		msj := pym(f)
+		msj := pym(r)
 
 		c := helloworld.NewHelloworldServiceClient(conn)
 		
