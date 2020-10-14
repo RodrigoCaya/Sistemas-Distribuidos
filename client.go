@@ -2,7 +2,8 @@ package main
 
 import (
 	"log"
-	//"time"
+	"time"
+	"strconv"
 	"fmt"
 	"os"
 	"encoding/csv"
@@ -14,7 +15,7 @@ import (
 )
 
 
-func pym(conn *grpc.ClientConn){	
+func pym(conn *grpc.ClientConn, tiempo int){	
 	f, err := os.Open("pymes/pymes.csv")
 	if err != nil{
 		log.Printf("error abriendo el archivo: %v", err)
@@ -56,11 +57,11 @@ func pym(conn *grpc.ClientConn){
 		}
 
 		log.Printf("Response from Server: %s", response.Id)
-		//time.Sleep(2 * time.Second)
+		time.Sleep(time.Duration(tiempo) * time.Second)
 	}
 }
 
-func ret(conn *grpc.ClientConn){	
+func ret(conn *grpc.ClientConn, tiempo int){	
 	f, err := os.Open("retail/retail.csv")
 	if err != nil{
 		log.Printf("error abriendo el archivo: %v", err)
@@ -102,7 +103,7 @@ func ret(conn *grpc.ClientConn){
 		}
 
 		log.Printf("Response from Server: %s", response.Id)
-		//time.Sleep(2 * time.Second)
+		time.Sleep(time.Duration(tiempo) * time.Second)
 	}
 }
 
@@ -130,11 +131,19 @@ func main() {
 			var second string 	  
 			fmt.Scanln(&second)
 			if second == "1"{
-				pym(conn)
+				fmt.Println("Indique el intervalo de tiempo entre pedidos: ")
+				var tiempo1 string 	  
+				fmt.Scanln(&tiempo1)
+				i, err := strconv.Atoi(tiempo1)
+				pym(conn,i)
 				break
 			}
 			if second == "2"{
-				ret(conn)
+				fmt.Println("Indique el intervalo de tiempo entre pedidos: ")
+				var tiempo2 string 	  
+				fmt.Scanln(&tiempo2)
+				i, err := strconv.Atoi(tiempo2)
+				ret(conn,i)
 				break
 			}
 		}
