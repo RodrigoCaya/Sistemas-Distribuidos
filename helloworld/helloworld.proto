@@ -10,8 +10,8 @@ message Message {
 	string propietario = 6;
 }
 
-respuesta Respuesta{
-	string body = 1;
+message Respuesta{
+	string body = 7;
 }
 
 service HelloworldService {
