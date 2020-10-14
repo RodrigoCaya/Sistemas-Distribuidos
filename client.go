@@ -48,20 +48,10 @@ func pym() []pymes{
 		p := pymes{
 			id: record[0],
 			producto: record[1],
+			valor: record[2],
 			tienda: record[3],
 			destino: record[4],
-		}
-
-		if record[2] != ""{
-			i, err := strconv.Atoi(record[2])
-			
-			p.valor = i
-		}
-
-		if record[5] != ""{
-			j, err := strconv.Atoi(record[5])
-			
-			p.propietario = j
+			propietario: record[5],
 		}
 
 		pyme = append(pyme, p)
