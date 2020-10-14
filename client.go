@@ -66,25 +66,25 @@ func main() {
 
 	//leer pymes
 	
-	msj := pym()
+	for{
+		msj := pym()
 
-	c := helloworld.NewHelloworldServiceClient(conn)
-	
-	message := helloworld.Message{
-		Id: msj.id,
-		Producto: msj.producto,
-		Valor: msj.valor,
-		Tienda: msj.tienda,
-		Destino: msj.destino,
-		Propietario: msj.propietario,
+		c := helloworld.NewHelloworldServiceClient(conn)
+		
+		message := helloworld.Message{
+			Id: msj.id,
+			Producto: msj.producto,
+			Valor: msj.valor,
+			Tienda: msj.tienda,
+			Destino: msj.destino,
+			Propietario: msj.propietario,
+		}
+
+		response, err := c.SayHello(context.Background(), &message)
+		if err != nil {
+			log.Fatalf("Error when calling SayHello: %s", err)
+		}
+
+		log.Printf("Response from Server: %s", response.Id)
 	}
-
-	response, err := c.SayHello(context.Background(), &message)
-	if err != nil {
-		log.Fatalf("Error when calling SayHello: %s", err)
-	}
-
-	log.Printf("Response from Server: %s", response.Id)
-
-	
 }
