@@ -17,7 +17,7 @@ type retail struct {
 	destino string
 }
 
-func hola(){
+func main(){
 
 	f, err := os.Open("retail.csv")
 	if err != nil{
