@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-
+	"time"
 	"os"
 	"encoding/csv"
 	"io"
@@ -92,5 +92,6 @@ func main() {
 		}
 
 		log.Printf("Response from Server: %s", response.Id)
+		time.Sleep(2 * time.Second)
 	}
 }
