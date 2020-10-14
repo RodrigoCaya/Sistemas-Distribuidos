@@ -24,7 +24,7 @@ type pymes struct {
 	propietario int
 }
 
-func pymes(){
+func pym(){
 	f, err := os.Open("pymes/pymes.csv")
 	if err != nil{
 		log.Printf("error abriendo el archivo: %v", err)
