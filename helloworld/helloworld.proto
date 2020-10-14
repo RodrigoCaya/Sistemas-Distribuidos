@@ -5,6 +5,6 @@ message Message {
 	string body = 1;
 }
 
-service ChatService {
+service HelloworldService {
 	rpc SayHello(Message) returns (Message) {}
 }
