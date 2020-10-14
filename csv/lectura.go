@@ -6,6 +6,7 @@ import(
 	"encoding/csv"
 	"fmt"
 	"io"
+	"strconv"
 )
 
 type pymes struct {
@@ -28,7 +29,7 @@ func main(){
 	r.Comma = ','
 	r.FieldsPerRecord = 6
 
-	var rawData []pymes
+	var pyme []pymes
 	for {
 		record, err := r.Read()
 		if err == io.EOF {
@@ -39,10 +40,10 @@ func main(){
 		}
 
 		p := pymes{
-			id: record[0]
-			producto: record[1]
-			tienda: record[3]
-			destino: record[4]
+			id: record[0],
+			producto: record[1],
+			tienda: record[3],
+			destino: record[4],
 		}
 
 		if record[2] != ""{
@@ -63,7 +64,7 @@ func main(){
 			p.propietario = j
 		}
 
-		rawData = append(rawData, record)
+		pyme = append(pyme, p)
 	}
-	fmt.Println(rawData)
+	fmt.Println(pyme)
 }
