@@ -40,9 +40,7 @@ func pym() []pymes{
 	var pyme []pymes
 	//for
 		record, err := r.Read()
-		if err == io.EOF {
-			break
-		}
+
 		if err != nil {
 			log.Printf("error leyendo la linea: %v", err)
 		}
@@ -56,19 +54,13 @@ func pym() []pymes{
 
 		if record[2] != ""{
 			i, err := strconv.Atoi(record[2])
-			if err != nil{
-				log.Printf("error al procesar el valor: %v", err)
-				continue
-			}
+			
 			p.valor = i
 		}
 
 		if record[5] != ""{
 			j, err := strconv.Atoi(record[5])
-			if err != nil{
-				log.Printf("error al procesar el propietario: %v", err)
-				continue
-			}
+			
 			p.propietario = j
 		}
 

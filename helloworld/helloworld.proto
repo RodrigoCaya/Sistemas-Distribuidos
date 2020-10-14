@@ -10,6 +10,14 @@ message Message {
 	string propietario = 6;
 }
 
+respuesta Respuesta{
+	string body = 1;
+}
+
 service HelloworldService {
 	rpc SayHello(Message) returns (Message) {}
+}
+
+service RespuestaService {
+	rpc SayAnswer(Respuesta) returns (Respuesta) {}
 }
