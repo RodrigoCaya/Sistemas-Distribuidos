@@ -5,9 +5,6 @@ import (
 
 	"os"
 	"encoding/csv"
-	"fmt"
-	"io"
-	"strconv"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -74,12 +71,12 @@ func main() {
 	c := helloworld.NewHelloworldServiceClient(conn)
 	
 	message := helloworld.Message{
-		id: msj.id,
-		producto: msj.producto,
-		valor: msj.valor,
-		tienda: msj.tienda,
-		destino: msj.destino,
-		propietario: msj.propietario,
+		id: msj.Id,
+		producto: msj.Producto,
+		valor: msj.Valor,
+		tienda: msj.Tienda,
+		destino: msj.Destino,
+		propietario: msj.Propietario,
 	}
 
 	response, err := c.SayHello(context.Background(), &message)
