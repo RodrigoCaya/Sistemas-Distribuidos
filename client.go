@@ -5,7 +5,7 @@ import (
 
 	"os"
 	"encoding/csv"
-
+	"io"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
@@ -21,12 +21,11 @@ type pymes struct {
 	propietario string
 }
 
-func pym(r *csv.Reader) pymes{
+func pym(record []string, err error) pymes{
 	
 	//var pyme []pymes
 	//for
-		record, err := r.Read()
-
+		
 		if err != nil {
 			log.Printf("error leyendo la linea: %v", err)
 		}
@@ -70,7 +69,11 @@ func main() {
 	}
 
 	for{
-		msj := pym(r)
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		msj := pym(record, err)
 
 		c := helloworld.NewHelloworldServiceClient(conn)
 		
