@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	//"time"
+	"fmt"
 	"os"
 	"encoding/csv"
 	"io"
@@ -113,7 +114,36 @@ func main() {
 		log.Fatalf("could not connect: %s", err)
 	}
 	defer conn.Close()
-	pym(conn)
-	ret(conn)
-	
+
+	for{
+		fmt.Println("Escoge: ") 
+		fmt.Println("(1) Enviar pedidos") 
+		fmt.Println("(2) Buscar pedido")
+		fmt.Println("-----------------")
+		var first string 	  
+		fmt.Scanln(&first)
+		if first == "1"{
+			fmt.Println("Escoge: ") 
+			fmt.Println("(1) Pymes") 
+			fmt.Println("(2) Retail")
+			fmt.Println("-----------------")
+			var second string 	  
+			fmt.Scanln(&second)
+			if second == "1"{
+				pym(conn)
+				break
+			}
+			if second == "2"{
+				ret(conn)
+				break
+			}
+		}
+		if first == "2"{
+			fmt.Println("Introduzca el código de seguimiento: ")
+			var thrd string 	  
+			fmt.Scanln(&thrd)
+			break
+		}
+
+	} 	
 }
