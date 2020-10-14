@@ -12,6 +12,5 @@ message Message {
 
 service HelloworldService {
 	rpc SayHello(Message) returns (Message) {}
-	rpc SayAnswer(Message.id) returns (Message.id) {}
 }
 
