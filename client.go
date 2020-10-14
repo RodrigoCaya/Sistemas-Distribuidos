@@ -21,7 +21,7 @@ type pymes struct {
 	propietario string
 }
 
-func pym() []pymes{
+func pym() pymes{
 	f, err := os.Open("pymes/pymes.csv")
 	if err != nil{
 		log.Printf("error abriendo el archivo: %v", err)
@@ -53,7 +53,7 @@ func pym() []pymes{
 
 		pyme = append(pyme, p)
 
-	return(pyme)
+	return(p)
 }
 
 func main() {
@@ -71,12 +71,12 @@ func main() {
 	c := helloworld.NewHelloworldServiceClient(conn)
 	
 	message := helloworld.Message{
-		id: msj.Id,
-		producto: msj.Producto,
-		valor: msj.Valor,
-		tienda: msj.Tienda,
-		destino: msj.Destino,
-		propietario: msj.Propietario,
+		Id: msj.id,
+		Producto: msj.producto,
+		Valor: msj.valor,
+		Tienda: msj.tienda,
+		Destino: msj.destino,
+		Propietario: msj.propietario,
 	}
 
 	response, err := c.SayHello(context.Background(), &message)
@@ -84,7 +84,7 @@ func main() {
 		log.Fatalf("Error when calling SayHello: %s", err)
 	}
 
-	log.Printf("Response from Server: %s", response.Body)
+	log.Printf("Response from Server: %s", response.Id)
 
 	
 }
