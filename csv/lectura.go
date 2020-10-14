@@ -29,6 +29,11 @@ func main(){
 	r.Comma = ','
 	r.FieldsPerRecord = 6
 
+	if _, err := r.Read(); err != nil{
+		panic(err)
+	}
+
+
 	var pyme []pymes
 	for {
 		record, err := r.Read()
