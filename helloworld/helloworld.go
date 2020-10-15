@@ -34,8 +34,8 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 	}
 	tiempo := time.Now()
 	tiempo.Format("2006-01-02 15:04:05")
-	
-	_, err = f.Write([]byte(tiempo.String()+","+strconv.Itoa(cont)+","+message.Tipo+","+message.Producto+","+message.Valor+","+message.Tienda+","+message.Destino+","+codigo+"\n"))
+
+	_, err = f.Write([]byte(tiempo.Format("2006-01-02 15:04:05")+","+strconv.Itoa(cont)+","+message.Tipo+","+message.Producto+","+message.Valor+","+message.Tienda+","+message.Destino+","+codigo+"\n"))
     if err != nil {
         log.Fatal(err)
 	}
