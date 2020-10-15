@@ -41,15 +41,33 @@ func pym(conn *grpc.ClientConn, tiempo int){
 		}
 
 		c := helloworld.NewHelloworldServiceClient(conn)
-		
-		message := helloworld.Message{
-			Id: record[0],
-			Producto: record[1],
-			Valor: record[2],
-			Tienda: record[3],
-			Destino: record[4],
-			Propietario: record[5],
+
+		message := helloworld.Message{}
+		if record[5] == "1"{
+			message = helloworld.Message{
+				Id: record[0],
+				Producto: record[1],
+				Valor: record[2],
+				Tienda: record[3],
+				Destino: record[4],
+				Estado: "En bodega",
+				Prioritario: record[5],
+				Tipo: "prioritario",
+			}
+		}else{
+			message = helloworld.Message{
+				Id: record[0],
+				Producto: record[1],
+				Valor: record[2],
+				Tienda: record[3],
+				Destino: record[4],
+				Estado: "En bodega",
+				Prioritario: record[5],
+				Tipo: "normal",
+			}
 		}
+
+
 
 		response, err := c.SayHello(context.Background(), &message)
 		if err != nil {
@@ -94,8 +112,8 @@ func ret(conn *grpc.ClientConn, tiempo int){
 			Valor: record[2],
 			Tienda: record[3],
 			Destino: record[4],
-			Propietario: "",
-			Estado: "En curso",
+			Estado: "En bodega",
+			Tipo: "retail",
 		}
 
 		response, err := c.SayHello(context.Background(), &message)
@@ -152,7 +170,7 @@ func main() {
 				fmt.Scanln(&tiempo1)
 				i, err := strconv.Atoi(tiempo1)
 				if err != nil{
-					log.Printf("error al procesar el propietario: %v", err)
+					log.Printf("error al procesar el prioritario: %v", err)
 					continue
 				}
 				pym(conn,i)
@@ -164,7 +182,7 @@ func main() {
 				fmt.Scanln(&tiempo2)
 				i, err := strconv.Atoi(tiempo2)
 				if err != nil{
-					log.Printf("error al procesar el propietario: %v", err)
+					log.Printf("error al procesar el prioritario: %v", err)
 					continue
 				}
 				ret(conn,i)

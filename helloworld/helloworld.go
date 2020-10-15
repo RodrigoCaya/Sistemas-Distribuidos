@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"encoding/csv"
 	"io"
+	"time"
 	"golang.org/x/net/context"
 )
 
@@ -15,15 +16,26 @@ type Server struct{
 var cont int = 0
 
 func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, error){
-	log.Printf("%s %s %s %s %s %s %s", message.Id, message.Producto, message.Valor, message.Tienda, message.Destino, message.Propietario, message.Estado)
 	cont = cont + 1
-	result := "Codigo de seguimiento de " + message.Producto + " es: " + strconv.Itoa(cont)
+	result :=""
+	codigo :=""
+	if message.Tipo == "retail"{
+		codigo = "1"+strconv.Itoa(cont)
+		result = "Codigo de seguimiento de " + message.Producto + " es: " + codigo
+	}else{
+		codigo = "2"+strconv.Itoa(cont)
+		result = "Codigo de seguimiento de " + message.Producto + " es: " + codigo
+	}
+	
 	
 	f, err := os.OpenFile("csv/registro.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
     if err != nil {
         log.Fatal(err)
 	}
-	_, err = f.Write([]byte(strconv.Itoa(cont)+","+message.Id+","+message.Producto+","+message.Valor+","+message.Tienda+","+message.Destino+","+message.Propietario+","+message.Estado+"\n"))
+	tiempo := time.Now()
+	tiempo.Format("2006-01-02 15:04:05")
+	
+	_, err = f.Write([]byte(tiempo.String()+","+strconv.Itoa(cont)+","+message.Tipo+","+message.Producto+","+message.Valor+","+message.Tienda+","+message.Destino+","+codigo+"\n"))
     if err != nil {
         log.Fatal(err)
 	}
