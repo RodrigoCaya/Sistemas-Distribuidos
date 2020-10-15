@@ -17,9 +17,22 @@ message CodeRequest {
 	string code = 1;
 }
 
+message PaqueteRequest {
+	string idpaquete = 1;
+	string idcamion = 2;
+	string seguimiento = 3;
+	string tipo = 4;
+	string valor = 5;
+	string intentos = 6;
+	string estado = 7;
+	string producto = 8;
+}
+
 service HelloworldService {
 	rpc SayHello(Message) returns (Message) {}
 	rpc Buscar(CodeRequest) returns (CodeRequest) {}
+	rpc EnviarPaquete(PaqueteRequest) returns (PaqueteRequest) {}
+
 }
 
 

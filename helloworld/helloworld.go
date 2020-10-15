@@ -21,6 +21,18 @@ type Seguimiento struct{
 
 var seguimientos []Seguimiento
 
+type Paquete struct{
+	id_paquete string
+	id_seguimiento string
+	tipo string
+	valor string
+	intentos int
+	estado string
+}
+
+var retail []Paquete
+var prioritario []Paquete
+var no_prioritario []Paquete
 
 var cont int = 0
 
@@ -29,7 +41,7 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 	result :=""
 	codigo :=""
 	if message.Tipo == "retail"{
-		codigo = "1"+strconv.Itoa(cont)
+		codigo = "0"
 		result = "Codigo de seguimiento de " + message.Producto + " es: " + codigo
 	}else{
 		codigo = "2"+strconv.Itoa(cont)
@@ -57,6 +69,25 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 		cant_intentos: "",
 	}
 	seguimientos = append(seguimientos, seguimiento1)
+
+	//agregar paquetes a colas
+	paquete1 := Paquete{
+		id_paquete: strconv.Itoa(cont),
+		id_seguimiento: codigo,
+		tipo: message.Tipo,
+		valor: message.Valor,
+		intentos: 0,
+		estado: message.Estado,
+	}
+	
+	if paquete1.tipo == "retail"{
+		retail = append(retail, paquete1)
+	}else if paquete1.tipo == "normal"{
+				no_prioritario = append(no_prioritario, paquete1)
+	}else{
+		prioritario = append(prioritario, paquete1)
+	}
+
 	return &Message{Id: result}, nil
 }
 
@@ -74,3 +105,14 @@ func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest
 	}
 	return &CodeRequest{Code: result}, nil
 }
+
+// func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*PaqueteRequest, error) {
+// 	string idpaquete = 1;
+// 	string idcamion = 2;
+// 	string seguimiento = 3;
+// 	string tipo = 4;
+// 	string valor = 5;
+// 	string intentos = 6;
+// 	string estado = 7;
+// 	string producto = 8
+// }
