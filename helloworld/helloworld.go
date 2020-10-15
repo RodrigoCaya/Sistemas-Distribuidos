@@ -4,14 +4,23 @@ import (
 	"os"
 	"log"
 	"strconv"
-	"encoding/csv"
-	"io"
 	"time"
 	"golang.org/x/net/context"
 )
 
 type Server struct{
 }
+
+type Seguimiento struct{
+	id_paquete string
+	estado_paquete string
+	id_camion string
+	id_seguimiento string
+	cant_intentos string
+}
+
+var seguimientos []Seguimiento
+
 
 var cont int = 0
 
@@ -40,38 +49,28 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
         log.Fatal(err)
 	}
 	f.Close()
+	seguimiento1 := Seguimiento{
+		id_paquete: strconv.Itoa(cont),
+		estado_paquete: message.Estado,
+		id_camion: "",
+		id_seguimiento: codigo,
+		cant_intentos: "",
+	}
+	seguimientos = append(seguimientos, seguimiento1)
 	return &Message{Id: result}, nil
 }
 
 func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest, error) {
-	//log.Printf("ERROR 1")
-	f, err := os.Open("csv/registro.csv")
-	if err != nil{
-		log.Printf("error abriendo el archivo: %v", err)
-	}
-	defer f.Close()
-
-	r := csv.NewReader(f)
-	r.Comma = ','
-	r.FieldsPerRecord = 8
-
-	if _, err := r.Read(); err != nil{
-		panic(err)
-	}
+	i := 0
 	result := "No se encontró el producto"
-	for{
-		record, err := r.Read()
-		if err == io.EOF {
-			break
+	if seguimientos != nil{
+		for{
+			if seguimientos[i].id_seguimiento == message.Code{
+				result = "El estado de su producto es: "+seguimientos[i].estado_paquete
+				return &CodeRequest{Code: result}, nil
+			}
 		}
-
-		if err != nil {
-			log.Printf("error leyendo la linea: %v", err)
-		}
-		if record[0] == message.Code{
-			result = "El estado de su producto es: "+record[7]
-			break
-		}
+	}else{
+		return &CodeRequest{Code: result}, nil
 	}
-	return &CodeRequest{Code: result}, nil
 }
