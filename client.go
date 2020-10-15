@@ -111,16 +111,16 @@ func ret(conn *grpc.ClientConn, tiempo int){
 func codigo(conn *grpc.ClientConn, codigo string){
 	c := helloworld.NewHelloworldServiceClient(conn)
 		
-		message := helloworld.CodeRequest{
-			Code: codigo,
-		}
+	message := helloworld.CodeRequest{
+		Code: codigo,
+	}
 
-		response, err := c.Buscar(context.Background(), &message)
-		if err != nil {
-			log.Fatalf("Error when calling Buscar: %s", err)
-		}
+	response, err := c.Buscar(context.Background(), &message)
+	if err != nil {
+		log.Fatalf("Error when calling Buscar: %s", err)
+	}
 
-		log.Printf("%s", response.Code)
+	log.Printf("%s", response.Code)
 }
 
 func main() {

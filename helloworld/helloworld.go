@@ -32,6 +32,7 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 }
 
 func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest, error) {
+	//log.Printf("ERROR 1")
 	f, err := os.Open("csv/registro.csv")
 	if err != nil{
 		log.Printf("error abriendo el archivo: %v", err)
@@ -40,7 +41,7 @@ func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest
 
 	r := csv.NewReader(f)
 	r.Comma = ','
-	r.FieldsPerRecord = 5
+	r.FieldsPerRecord = 8
 
 	if _, err := r.Read(); err != nil{
 		panic(err)
