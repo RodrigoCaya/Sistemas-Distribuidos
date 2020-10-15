@@ -16,7 +16,7 @@ import (
 
 
 func pym(conn *grpc.ClientConn, tiempo int){	
-	f, err := os.Open("pymes/pymes.csv")
+	f, err := os.Open("csv/pymes.csv")
 	if err != nil{
 		log.Printf("error abriendo el archivo: %v", err)
 	}
@@ -62,7 +62,7 @@ func pym(conn *grpc.ClientConn, tiempo int){
 }
 
 func ret(conn *grpc.ClientConn, tiempo int){	
-	f, err := os.Open("retail/retail.csv")
+	f, err := os.Open("csv/retail.csv")
 	if err != nil{
 		log.Printf("error abriendo el archivo: %v", err)
 	}
