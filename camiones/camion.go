@@ -63,7 +63,7 @@ func main(){
 		if i == 3{
 			break
 		}
-		message := helloworld.Message{
+		message := helloworld.PaqueteRequest{
 			Idcamion: camiones[i].id,
 			Tipo: camiones[i].tipo,
 		}
@@ -73,7 +73,7 @@ func main(){
 		if err != nil {
 			log.Fatalf("Error when calling EnviarPaquete: %s", err)
 		}
-		log.Printf("%s", response.Id)
+		log.Printf("%s", response.Idpaquete)
 		i = i+1
 	}
 
