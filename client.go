@@ -111,7 +111,7 @@ func ret(conn *grpc.ClientConn, tiempo int){
 func codigo(conn *grpc.ClientConn, codigo string){
 	c := helloworld.NewHelloworldServiceClient(conn)
 		
-		message := helloworld.codeRequest{
+		message := helloworld.CodeRequest{
 			Code: codigo,
 		}
 
