@@ -104,7 +104,6 @@ func ret(conn *grpc.ClientConn, tiempo int){
 		}
 
 		log.Printf("Codigo de seguimiento de %s", response.Id)
-		log.Println("Equisde", response.Producto)
 		time.Sleep(time.Duration(tiempo) * time.Second)
 	}
 }
