@@ -56,7 +56,7 @@ func pym(conn *grpc.ClientConn, tiempo int){
 			log.Fatalf("Error when calling SayHello: %s", err)
 		}
 
-		log.Printf("Codigo de seguimiento de %s", response.Id)
+		log.Printf("%s", response.Id)
 		time.Sleep(time.Duration(tiempo) * time.Second)
 	}
 }
@@ -103,7 +103,7 @@ func ret(conn *grpc.ClientConn, tiempo int){
 			log.Fatalf("Error when calling SayHello: %s", err)
 		}
 
-		log.Printf("Codigo de seguimiento de %s", response.Id)
+		log.Printf("%s", response.Id)
 		time.Sleep(time.Duration(tiempo) * time.Second)
 	}
 }
@@ -120,7 +120,7 @@ func codigo(conn *grpc.ClientConn, codigo string){
 			log.Fatalf("Error when calling Buscar: %s", err)
 		}
 
-		log.Printf("Codigo de seguimiento de %s", response.Code)
+		log.Printf("%s", response.Code)
 }
 
 func main() {
