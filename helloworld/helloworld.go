@@ -69,8 +69,8 @@ func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest
 				result = "El estado de su producto es: "+seguimientos[i].estado_paquete
 				return &CodeRequest{Code: result}, nil
 			}
+			i = i+1
 		}
-	}else{
-		return &CodeRequest{Code: result}, nil
 	}
+	return &CodeRequest{Code: result}, nil
 }
