@@ -95,6 +95,7 @@ func ret(conn *grpc.ClientConn, tiempo int){
 			Tienda: record[3],
 			Destino: record[4],
 			Propietario: "",
+			Estado: "En curso",
 		}
 
 		response, err := c.SayHello(context.Background(), &message)
@@ -118,6 +119,7 @@ func main() {
 	defer conn.Close()
 
 	for{
+		fmt.Println("-----------------")
 		fmt.Println("Escoge: ") 
 		fmt.Println("(1) Enviar pedidos") 
 		fmt.Println("(2) Buscar pedido")

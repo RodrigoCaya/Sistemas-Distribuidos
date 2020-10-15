@@ -8,6 +8,7 @@ message Message {
 	string tienda = 4;
 	string destino = 5;
 	string propietario = 6;
+	string estado = 7;
 }
 
 service HelloworldService {
