@@ -120,7 +120,7 @@ func codigo(conn *grpc.ClientConn, codigo string){
 			log.Fatalf("Error when calling Buscar: %s", err)
 		}
 
-		log.Printf("Codigo de seguimiento de %s", response.Id)
+		log.Printf("Codigo de seguimiento de %s", response.Code)
 }
 
 func main() {
