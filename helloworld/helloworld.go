@@ -106,13 +106,7 @@ func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest
 	return &CodeRequest{Code: result}, nil
 }
 
-// func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*PaqueteRequest, error) {
-// 	string idpaquete = 1;
-// 	string idcamion = 2;
-// 	string seguimiento = 3;
-// 	string tipo = 4;
-// 	string valor = 5;
-// 	string intentos = 6;
-// 	string estado = 7;
-// 	string producto = 8
-// }
+func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*PaqueteRequest, error) {
+	log.Printf("hola")
+	return &PaqueteRequest{}, nil
+}
