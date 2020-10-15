@@ -175,6 +175,7 @@ func main() {
 			fmt.Println("Introduzca el código de seguimiento: ")
 			var thrd string 	  
 			fmt.Scanln(&thrd)
+			codigo(conn,thrd)
 			break
 		}
 
