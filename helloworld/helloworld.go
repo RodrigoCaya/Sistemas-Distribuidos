@@ -28,3 +28,7 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 	f.Close()
 	return &Message{Id: result}, nil
 }
+
+func (s *server) Buscar(ctx context.Context, message *codeRequest) (*codeRequest, error) {
+	log.Printf("%s", codeRequest.code)
+}

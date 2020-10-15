@@ -11,7 +11,13 @@ message Message {
 	string estado = 7;
 }
 
+message codeRequest {
+	string code = 1;
+}
+
 service HelloworldService {
 	rpc SayHello(Message) returns (Message) {}
+	rpc Buscar(codeRequest) returns (codeRequest) {}
 }
+
 

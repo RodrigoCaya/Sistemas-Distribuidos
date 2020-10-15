@@ -108,6 +108,20 @@ func ret(conn *grpc.ClientConn, tiempo int){
 	}
 }
 
+func codigo(conn *grpc.ClientConn, codigo string){
+	c := helloworld.NewHelloworldServiceClient(conn)
+		
+		message := helloworld.codeRequest{
+			Code: codigo,
+		}
+
+		response, err := c.Buscar(context.Background(), &message)
+		if err != nil {
+			log.Fatalf("Error when calling Buscar: %s", err)
+		}
+
+		log.Printf("Codigo de seguimiento de %s", response.Id)
+}
 
 func main() {
 	var conn *grpc.ClientConn
