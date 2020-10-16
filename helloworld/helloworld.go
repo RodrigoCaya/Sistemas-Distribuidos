@@ -16,7 +16,7 @@ type Seguimiento struct{
 	estado_paquete string
 	id_camion string
 	id_seguimiento string
-	cant_intentos int
+	cant_intentos int32
 }
 
 var seguimientos []Seguimiento
@@ -26,7 +26,7 @@ type Paquete struct{
 	id_seguimiento string
 	tipo string
 	valor string
-	intentos int
+	intentos int32
 	estado string
 	origen string
 	destino string
