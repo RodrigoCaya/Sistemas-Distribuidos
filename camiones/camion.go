@@ -27,7 +27,7 @@ func conectar(i int, c helloworld.HelloworldServiceClient){
 		if err != nil {
 			log.Fatalf("Error when calling EnviarPaquete: %s", err)
 		}
-		log.Printf("%s", response.Idpaquete)
+		log.Printf("El camión %s tomó el paquete %s",camiones[i].id ,response.Idpaquete)
 }
 
 func main(){

@@ -44,7 +44,8 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 	result :=""
 	codigo :=""
 	if message.Tipo == "retail"{
-		codigo = "0"
+		//codigo = "0"
+		codigo = "1"+strconv.Itoa(cont)
 		result = "Codigo de seguimiento de " + message.Producto + " es: " + codigo
 	}else{
 		codigo = "2"+strconv.Itoa(cont)
@@ -115,22 +116,37 @@ func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest
 func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*PaqueteRequest, error) {
 	p := Paquete{}
 	i := 0
-	if message.Tipo == "retail"{
-		log.Printf("entre 1")
+	vacio := 0
+	if message.Tipo == "retail"{ //si es camion retail
 		if len(retail)!=0{
-			log.Printf("entre 2")
 			p, retail = retail[0], retail[1:] //pop
-			for{
-				if seguimientos[i].id_paquete == p.id_paquete{
-					seguimientos[i].estado_paquete = "En camino"
-					seguimientos[i].id_camion = message.Idcamion
-					seguimientos[i].cant_intentos = 1
-					break
-				}
-				i = i+1
-			}
-			return &PaqueteRequest{Idpaquete: p.id_paquete,Idcamion: message.Idcamion,Seguimiento: p.id_seguimiento,Tipo: p.tipo,Valor: p.valor,Intentos: p.intentos,Estado: p.estado,Producto: p.producto}, nil
+			
+		}else if len(prioritario)!=0{
+			p, prioritario = prioritario[0], prioritario[1:] //pop
+		}
+		
+	}else{ //si es camion normal
+		if len(prioritario)!=0{ 
+			p, prioritario = prioritario[0], prioritario[1:] //pop
+		}else if len(no_prioritario)!=0{ 
+			p, no_prioritario = no_prioritario[0], no_prioritario[1:] //pop
+		}else{//si estan las 3 colas vacias
+			vacio = 1
 		}
 	}
-	return &PaqueteRequest{Idpaquete: "jean"}, nil
+	if vacio == 0{
+		for{
+			if seguimientos[i].id_paquete == p.id_paquete{
+				seguimientos[i].estado_paquete = "En camino"
+				seguimientos[i].id_camion = message.Idcamion
+				seguimientos[i].cant_intentos = 1
+				break
+			}
+			i = i+1
+		}
+		return &PaqueteRequest{Idpaquete: p.id_paquete,Idcamion: message.Idcamion,Seguimiento: p.id_seguimiento,Tipo: p.tipo,Valor: p.valor,Intentos: p.intentos,Estado: p.estado,Producto: p.producto}, nil
+	}else{
+		return &PaqueteRequest{Idpaquete: "No hay más paquetes"}, nil
+	}
+	//Se puede asignar un paquete prioritario a los camiones de retail tras volver de una entrega con paquetes de retail.
 }
