@@ -23,7 +23,7 @@ message PaqueteRequest {
 	string seguimiento = 3;
 	string tipo = 4;
 	string valor = 5;
-	string intentos = 6;
+	int32 intentos = 6;
 	string estado = 7;
 	string producto = 8;
 	string origen = 9;
