@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 	"strconv"
+	"math/rand"
 	"google.golang.org/grpc"
 	"golang.org/x/net/context"
 	"github.com/RodrigoCaya/Sistemas-Distribuidos/helloworld"
@@ -13,17 +14,23 @@ import (
 type Camion struct{
 	id string
 	tipo string
-	espacio int
+	pack []*helloworld.PaqueteRequest
 	disponibilidad int
 }
 
 var camiones []Camion
 
-// func delivery(){
+func delivery(carga Camion){
 	//todo
 	// cambiar disponibilidad a 1 al volver
 	// hacer +1 al espacio cuando entregue
-// }
+	// reintentar cuesta 10 dignipesos
+	if carga.pack[0].Valor > carga.pack[1].Valor{
+		probabilidad := rand.Intn(100)
+		log.Printf("%d",probabilidad)
+		log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[0].Destino,carga.pack[0].Idpaquete)
+	}
+}
 
 func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
 	for{
@@ -38,21 +45,22 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
 		}
 		if response.Idpaquete != "No hay más paquetes" {
 			log.Printf("El camión %s tomó el paquete %s con código %s",camiones[i].id ,response.Idpaquete, response.Seguimiento)
-			camiones[i].espacio = camiones[i].espacio - 1
+			camiones[i].pack = append(camiones[i].pack, response)
+			// camiones[i].espacio = camiones[i].espacio - 1
 		}else{
 			log.Printf("No hay más paquetes para el camión %s",camiones[i].id)
-			if camiones[i].espacio == 1{
+			if len(camiones[i].pack) == 1{
 				log.Printf("El camión %s fue a hacer su entrega",camiones[i].id)
 				camiones[i].disponibilidad = 0
-				//delivery()
-			}else if camiones[i].espacio == 2 {
+				// delivery()
+			}else if len(camiones[i].pack) == 0 {
 				log.Printf("El camión %s se ha quedado vacío",camiones[i].id)
 			}
 		}
-		if camiones[i].espacio == 0 {
+		if len(camiones[i].pack) == 2 {
 			log.Printf("El camión %s fue a hacer su entrega",camiones[i].id)
 			camiones[i].disponibilidad = 0
-			//delivery()
+			delivery(camiones[i])
 		}
 		time.Sleep(time.Duration(tiempo) * time.Second)
 	}
@@ -71,21 +79,21 @@ func main(){
 	camionr1 := Camion{
 		id: "r1",
 		tipo: "retail",
-		espacio: 2,
+		pack: nil,
 		disponibilidad: 1,
 	}
 	
 	camionr2 := Camion{
 		id: "r2",
 		tipo: "retail",
-		espacio: 2,
+		pack: nil,
 		disponibilidad: 1,
 	}
 
 	camion := Camion{
 		id: "n1",
 		tipo: "normal",
-		espacio: 2,
+		pack: nil,
 		disponibilidad: 1,
 	}
 
