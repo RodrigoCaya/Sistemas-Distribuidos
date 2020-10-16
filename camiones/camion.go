@@ -17,6 +17,19 @@ type Camion struct{
 
 var camiones []Camion
 
+func conectar(i int, c helloworld.HelloworldServiceClient){
+	message := helloworld.PaqueteRequest{
+		Idcamion: camiones[i].id,
+		Tipo: camiones[i].tipo,
+	}
+	log.Printf("Camión "+camiones[i].id+" se está preparando")
+		response, err := c.EnviarPaquete(context.Background(), &message)
+		if err != nil {
+			log.Fatalf("Error when calling EnviarPaquete: %s", err)
+		}
+		log.Printf("%s", response.Idpaquete)
+}
+
 func main(){
 	var conn *grpc.ClientConn
 	conn, err := grpc.Dial("dist14:9001", grpc.WithInsecure())
@@ -58,33 +71,11 @@ func main(){
 
 	log.Printf("Los camiones estan listos para partir")
 
-	i := 0
-	for{
-		if i == 3{
-			break
-		}
-		message := helloworld.PaqueteRequest{
-			Idcamion: camiones[i].id,
-			Tipo: camiones[i].tipo,
-		}
+	go conectar(1,c)
 
-		log.Printf("Camión "+camiones[i].id+" se está preparando")
-		response, err := c.EnviarPaquete(context.Background(), &message)
-		if err != nil {
-			log.Fatalf("Error when calling EnviarPaquete: %s", err)
-		}
-		log.Printf("%s", response.Idpaquete)
-		i = i+1
-	}
+	go conectar(2,c)
 
-	// string idpaquete = 1;
-	// string idcamion = 2;
-	// string seguimiento = 3;
-	// string tipo = 4;
-	// string valor = 5;
-	// string intentos = 6;
-	// string estado = 7;
-	// string producto = 8;
+	conectar(0,c)
 
 	
 

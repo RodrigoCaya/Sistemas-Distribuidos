@@ -26,6 +26,8 @@ message PaqueteRequest {
 	string intentos = 6;
 	string estado = 7;
 	string producto = 8;
+	string origen = 9;
+	string destino = 10;
 }
 
 service HelloworldService {

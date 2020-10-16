@@ -16,7 +16,7 @@ type Seguimiento struct{
 	estado_paquete string
 	id_camion string
 	id_seguimiento string
-	cant_intentos string
+	cant_intentos int
 }
 
 var seguimientos []Seguimiento
@@ -28,6 +28,9 @@ type Paquete struct{
 	valor string
 	intentos int
 	estado string
+	origen string
+	destino string
+	producto string
 }
 
 var retail []Paquete
@@ -66,7 +69,7 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 		estado_paquete: message.Estado,
 		id_camion: "",
 		id_seguimiento: codigo,
-		cant_intentos: "",
+		cant_intentos: 0,
 	}
 	seguimientos = append(seguimientos, seguimiento1)
 
@@ -78,6 +81,9 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 		valor: message.Valor,
 		intentos: 0,
 		estado: message.Estado,
+		origen: message.Tienda,
+		destino: message.Destino,
+		producto: message.Producto,
 	}
 	
 	if paquete1.tipo == "retail"{
@@ -107,6 +113,22 @@ func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest
 }
 
 func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*PaqueteRequest, error) {
-	log.Printf("hola")
+	p := Paquete{}
+	i := 0
+	if message.Tipo == "retail"{
+		if len(retail)!=0{
+			p, retail = retail[0], retail[1:] //pop
+			for{
+				if seguimientos[i].id_paquete == p.id_paquete{
+					seguimientos[i].estado_paquete = "En camino"
+					seguimientos[i].id_camion = message.Idcamion
+					seguimientos[i].cant_intentos = 1
+					break
+				}
+				i = i+1
+			}
+			return &PaqueteRequest{Idpaquete: p.id_paquete,Idcamion: message.Idcamion,Seguimiento: p.id_seguimiento,Tipo: p.tipo,Valor: p.valor,Intentos: p.intentos,Estado: p.estado,Producto: p.producto}, nil
+		}
+	}
 	return &PaqueteRequest{Idpaquete: "jean"}, nil
 }
