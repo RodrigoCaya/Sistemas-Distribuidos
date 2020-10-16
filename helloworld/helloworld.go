@@ -156,3 +156,9 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 	}
 	//Se puede asignar un paquete prioritario a los camiones de retail tras volver de una entrega con paquetes de retail.
 }
+
+
+func (s *Server) EnviarDatos(ctx context.Context, message *PaqueteRequest) (*CodeRequest, error) {
+	//enviar datos a finanzas
+	return &CodeRequest{Code: "ok"}, nil
+}

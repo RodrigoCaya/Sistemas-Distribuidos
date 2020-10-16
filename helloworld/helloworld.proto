@@ -28,13 +28,14 @@ message PaqueteRequest {
 	string producto = 8;
 	string origen = 9;
 	string destino = 10;
+	string tiempo = 11;
 }
 
 service HelloworldService {
 	rpc SayHello(Message) returns (Message) {}
 	rpc Buscar(CodeRequest) returns (CodeRequest) {}
 	rpc EnviarPaquete(PaqueteRequest) returns (PaqueteRequest) {}
-
+	rpc EnviarDatos(PaqueteRequest) returns (CodeRequest) {}
 }
 
 
