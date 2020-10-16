@@ -22,6 +22,7 @@ var camiones []Camion
 // func delivery(){
 	//todo
 	// cambiar disponibilidad a 1 al volver
+	// hacer +1 al espacio cuando entregue
 // }
 
 func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
@@ -37,18 +38,18 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
 		}
 		if response.Idpaquete != "No hay más paquetes" {
 			log.Printf("El camión %s tomó el paquete %s con código %s",camiones[i].id ,response.Idpaquete, response.Seguimiento)
-			camiones[i].espacio = camiones[i].espacio + 1
+			camiones[i].espacio = camiones[i].espacio - 1
 		}else{
 			log.Printf("No hay más paquetes para el camión %s",camiones[i].id)
 			if camiones[i].espacio == 1{
 				log.Printf("El camión %s fue a hacer su entrega",camiones[i].id)
 				camiones[i].disponibilidad = 0
 				//delivery()
-			}else if camiones[i].espacio == 0 {
+			}else if camiones[i].espacio == 2 {
 				log.Printf("El camión %s se ha quedado vacío",camiones[i].id)
 			}
 		}
-		if camiones[i].espacio == 2 {
+		if camiones[i].espacio == 0 {
 			log.Printf("El camión %s fue a hacer su entrega",camiones[i].id)
 			camiones[i].disponibilidad = 0
 			//delivery()
