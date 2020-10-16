@@ -25,10 +25,21 @@ func delivery(carga Camion){
 	// cambiar disponibilidad a 1 al volver
 	// hacer +1 al espacio cuando entregue
 	// reintentar cuesta 10 dignipesos
-	if carga.pack[0].Valor > carga.pack[1].Valor{
+	valor0, err := strconv.Atoi(carga.pack[0].Valor)
+	if err != nil{
+		log.Printf("El valor del paquete no es un número: %v", err)
+	}
+	valor1, err := strconv.Atoi(carga.pack[1].Valor)
+	if err != nil{
+		log.Printf("El valor del paquete no es un número: %v", err)
+	}
+	if valor0 > valor1{
 		probabilidad := rand.Intn(100)
-		log.Printf("%d",probabilidad)
+		log.Printf("la probabilidad es %d",probabilidad)
 		log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[0].Destino,carga.pack[0].Idpaquete)
+	}else{
+		probabilidad := rand.Intn(100)
+		log.Printf("la probabilidad es %d",probabilidad)
 	}
 }
 
