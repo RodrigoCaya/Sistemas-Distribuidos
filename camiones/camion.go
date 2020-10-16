@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"log"
 	"time"
 	"strconv"
@@ -21,28 +22,20 @@ type Camion struct{
 var camiones []Camion
 
 func reporte(carga Camion){ //falta agregar la hora de entrega
-	if carga.id == "r1"{
-		f, err := os.OpenFile("registroR1.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	intent := ""
+	nombre := "registro"+carga.id+".csv"
+	f, err := os.OpenFile(nombre, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
-	}else if carga.id == "r2"{
-		f, err := os.OpenFile("registroR2.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}else{
-		f, err := os.OpenFile("registroN1.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
 	i := 0
 	for{
-		if i >= len(carga.pack){
+		if i >= len(carga.pack) {
 			break
 		}
-		_, err = f.Write(carga.pack[i].Idpaquete+","+carga.tipo+","+carga.pack[i].Valor+","+carga.pack[i].Origen+","+carga.pack[i].Destino+","+carga.pack[i].Intentos+"\n"))
+		intent = strconv.Itoa(int(carga.pack[i].Intentos))
+		
+		_, err = f.Write([]byte(carga.pack[i].Idpaquete+","+carga.tipo+","+carga.pack[i].Valor+","+carga.pack[i].Origen+","+carga.pack[i].Destino+","+intent+"\n"))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -51,7 +44,7 @@ func reporte(carga Camion){ //falta agregar la hora de entrega
 	f.Close()
 }
 
-func reportarse(carga Camion){
+func reportarse(carga Camion, c helloworld.HelloworldServiceClient){
 	//crear el csv
 	//enviar los datos
 	//vaciar la carga
@@ -81,7 +74,7 @@ func reportarse(carga Camion){
 		if err != nil {
 			log.Fatalf("Error when calling EnviarPaquete: %s", err)
 		}
-		if response == "ok"{
+		if response.Code == "ok"{
 			log.Printf("El camión %s envió los paquetes a la central",carga.id)
 		}
 		i = i+1
@@ -239,7 +232,7 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
 				camiones[i].disponibilidad = 0
 				//salir a hacer delivery
 				camiones[i] = delivery1(camiones[i])
-				//reportarse
+				reportarse(camiones[i],c)
 			}else if len(camiones[i].pack) == 0 {
 				log.Printf("El camión %s esta vacío",camiones[i].id)
 			}
@@ -249,7 +242,7 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
 			camiones[i].disponibilidad = 0
 			//salir a hacer delivery
 			camiones[i] = delivery(camiones[i])
-			//reportarse
+			reportarse(camiones[i],c)
 		}
 		time.Sleep(time.Duration(tiempo) * time.Second)
 	}
