@@ -171,7 +171,7 @@ func main() {
 				fmt.Scanln(&tiempo1)
 				i, err := strconv.Atoi(tiempo1)
 				if err != nil{
-					log.Printf("error al procesar el prioritario: %v", err)
+					log.Printf("error al ingresar el valor: %v", err)
 					continue
 				}
 				pym(conn,i)
@@ -183,7 +183,7 @@ func main() {
 				fmt.Scanln(&tiempo2)
 				i, err := strconv.Atoi(tiempo2)
 				if err != nil{
-					log.Printf("error al procesar el prioritario: %v", err)
+					log.Printf("error al ingresar el valor: %v", err)
 					continue
 				}
 				ret(conn,i)
