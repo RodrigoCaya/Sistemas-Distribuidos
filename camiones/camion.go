@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
+	// "os"
 	"log"
 	"time"
 	"strconv"
@@ -21,54 +21,51 @@ type Camion struct{
 
 var camiones []Camion
 
-func reporte(carga Camion){ //falta agregar la hora de entrega
-	intent := ""
-	nombre := "registro"+carga.id+".csv"
-	f, err := os.OpenFile(nombre, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			log.Fatal(err)
-		}
-	i := 0
-	for{
-		if i >= len(carga.pack) {
-			break
-		}
-		intent = strconv.Itoa(int(carga.pack[i].Intentos))
+// func reporte(carga Camion){ //falta agregar la hora de entrega
+// 	intent := ""
+// 	nombre := "registro"+carga.id+".csv"
+// 	f, err := os.OpenFile(nombre, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 	i := 0
+// 	v := len(carga.pack)
+// 	for{
+// 		if i >= v {
+// 			break
+// 		}
+// 		intent = strconv.Itoa(int(carga.pack[i].Intentos))
 		
-		_, err = f.Write([]byte(carga.pack[i].Idpaquete+","+carga.tipo+","+carga.pack[i].Valor+","+carga.pack[i].Origen+","+carga.pack[i].Destino+","+intent+"\n"))
-		if err != nil {
-			log.Fatal(err)
-		}
-		i = i+1
-	}
-	f.Close()
-}
+// 		_, err = f.Write([]byte(carga.pack[i].Idpaquete+","+carga.tipo+","+carga.pack[i].Valor+","+carga.pack[i].Origen+","+carga.pack[i].Destino+","+intent+"\n"))
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		i = i+1
+// 	}
+// 	f.Close()
+// }
 
-func reportarse(carga Camion, c helloworld.HelloworldServiceClient){
-	//crear el csv
-	//enviar los datos
-	//vaciar la carga
-	//la funcion debe calcular cuanto se ganó y reponder ok
+func reportarse(carga Camion, c helloworld.HelloworldServiceClient)(nueva_carga Camion){
 
-	reporte(carga)
+	i := len(carga.pack) -1
 
-	i := 0
 	for{
-		if i >= len(carga.pack){
+		log.Printf("LARGO1 ES %d",len(carga.pack))
+		if len(carga.pack) == 0 {
 			break
 		}
 		message := helloworld.PaqueteRequest{
-			Idpaquete: carga.pack[i].Idpaquete,
-			Idcamion: carga.pack[i].Idcamion,
-			Seguimiento: carga.pack[i].Seguimiento,
-			Tipo: carga.pack[i].Tipo,
-			Valor: carga.pack[i].Valor,
-			Intentos: carga.pack[i].Intentos,
-			Estado: carga.pack[i].Estado,
-			Producto: carga.pack[i].Producto,
-			Origen: carga.pack[i].Origen,
-			Destino: carga.pack[i].Destino,
-			Tiempo: carga.pack[i].Tiempo,
+			Idpaquete: carga.pack[0].Idpaquete,
+			Idcamion: carga.pack[0].Idcamion,
+			Seguimiento: carga.pack[0].Seguimiento,
+			Tipo: carga.pack[0].Tipo,
+			Valor: carga.pack[0].Valor,
+			Intentos: carga.pack[0].Intentos,
+			Estado: carga.pack[0].Estado,
+			Producto: carga.pack[0].Producto,
+			Origen: carga.pack[0].Origen,
+			Destino: carga.pack[0].Destino,
+			Tiempo: carga.pack[0].Tiempo,
 		}
 		response, err := c.EnviarDatos(context.Background(), &message)
 		if err != nil {
@@ -77,9 +74,15 @@ func reportarse(carga Camion, c helloworld.HelloworldServiceClient){
 		if response.Code == "ok"{
 			log.Printf("El camión %s envió los paquetes a la central",carga.id)
 		}
-		i = i+1
+		i = i-1
+		log.Printf("LARGO2 ES %d",len(carga.pack))
+		
 		_, carga.pack = carga.pack[0], carga.pack[1:] //pop
+		
+		log.Printf("LARGO3 ES %d",len(carga.pack))
 	}
+	nueva_carga = carga
+	return
 }
 
 func vale_la_pena(pakete *helloworld.PaqueteRequest)(res int){
@@ -232,7 +235,8 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
 				camiones[i].disponibilidad = 0
 				//salir a hacer delivery
 				camiones[i] = delivery1(camiones[i])
-				reportarse(camiones[i],c)
+				camiones[i] = reportarse(camiones[i],c)
+				log.Printf("SALIII")
 			}else if len(camiones[i].pack) == 0 {
 				log.Printf("El camión %s esta vacío",camiones[i].id)
 			}
@@ -242,7 +246,8 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
 			camiones[i].disponibilidad = 0
 			//salir a hacer delivery
 			camiones[i] = delivery(camiones[i])
-			reportarse(camiones[i],c)
+			camiones[i] = reportarse(camiones[i],c)
+			log.Printf("SALIII")
 		}
 		time.Sleep(time.Duration(tiempo) * time.Second)
 	}
