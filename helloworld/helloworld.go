@@ -120,7 +120,7 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 	if message.Tipo == "retail"{ //si es camion retail
 		if len(retail)!=0{
 			p, retail = retail[0], retail[1:] //pop
-			
+			p.estado = "En camino"
 		}else if len(prioritario)!=0{
 			p, prioritario = prioritario[0], prioritario[1:] //pop
 			p.estado = "En camino"
