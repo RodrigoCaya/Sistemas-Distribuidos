@@ -33,13 +33,117 @@ func delivery(carga Camion){
 	if err != nil{
 		log.Printf("El valor del paquete no es un número: %v", err)
 	}
-	if valor0 > valor1{
-		probabilidad := rand.Intn(100)
-		log.Printf("la probabilidad es %d",probabilidad)
-		log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[0].Destino,carga.pack[0].Idpaquete)
-	}else{
-		probabilidad := rand.Intn(100)
-		log.Printf("la probabilidad es %d",probabilidad)
+	if carga.pack[0].Estado == "En camino" && carga.pack[1].Estado == "En camino"{
+		if carga.pack[0].Intentos == carga.pack[1].Intentos{
+			if valor0 > valor1{
+				log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[0].Destino,carga.pack[0].Idpaquete)
+				carga.pack[0].Intentos = carga.pack[0].Intentos + 1
+				probabilidad := rand.Intn(100)
+				if probabilidad < 20 {
+					log.Printf("No se encontraba nadie en el domicilio %s :(",carga.pack[0].Destino)
+					if(carga.pack[0].Intentos == 3){
+						log.Printf("El paquete %s se cambia a No recibido",carga.pack[0].Idpaquete)
+						carga.pack[0].Estado = "No Recibido"
+					}
+					delivery(carga)
+				}else{
+					log.Printf("Se entregó el paquete %s en el domicilio %s :D",carga.pack[0].Idpaquete,carga.pack[0].Destino)
+					carga.pack[0].Estado = "Recibido"
+					delivery(carga)
+				}
+			}else{
+				log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[1].Destino,carga.pack[1].Idpaquete)
+				carga.pack[1].Intentos = carga.pack[1].Intentos + 1
+				probabilidad := rand.Intn(100)
+				if probabilidad < 20 {
+					log.Printf("No se encontraba nadie en el domicilio %s :(",carga.pack[1].Destino)
+					if(carga.pack[0].Intentos == 3){
+						log.Printf("El paquete %s se cambia a No recibido",carga.pack[1].Idpaquete)
+						carga.pack[1].Estado = "No Recibido"
+					}
+					delivery(carga)
+				}else{
+					log.Printf("Se entregó el paquete %s en el domicilio %s :D",carga.pack[1].Idpaquete,carga.pack[1].Destino)
+					carga.pack[1].Estado = "Recibido"
+					delivery(carga)
+				}
+			}
+		}else{
+			if carga.pack[0].Intentos < carga.pack[1].Intentos{
+				log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[0].Destino,carga.pack[0].Idpaquete)
+				carga.pack[0].Intentos = carga.pack[0].Intentos + 1
+				probabilidad := rand.Intn(100)
+				if probabilidad < 20 {
+					log.Printf("No se encontraba nadie en el domicilio %s :(",carga.pack[0].Destino)
+					if(carga.pack[0].Intentos == 3){
+						log.Printf("El paquete %s se cambia a No recibido",carga.pack[0].Idpaquete)
+						carga.pack[0].Estado = "No Recibido"
+					}
+					delivery(carga)
+				}else{
+					log.Printf("Se entregó el paquete %s en el domicilio %s :D",carga.pack[0].Idpaquete,carga.pack[0].Destino)
+					carga.pack[0].Estado = "Recibido"
+					delivery(carga)
+				}
+			}else{
+				log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[1].Destino,carga.pack[1].Idpaquete)
+				carga.pack[1].Intentos = carga.pack[1].Intentos + 1
+				probabilidad := rand.Intn(100)
+				if probabilidad < 20 {
+					log.Printf("No se encontraba nadie en el domicilio %s :(",carga.pack[1].Destino)
+					if(carga.pack[0].Intentos == 3){
+						log.Printf("El paquete %s se cambia a No recibido",carga.pack[1].Idpaquete)
+						carga.pack[1].Estado = "No Recibido"
+					}
+					delivery(carga)
+				}else{
+					log.Printf("Se entregó el paquete %s en el domicilio %s :D",carga.pack[1].Idpaquete,carga.pack[1].Destino)
+					carga.pack[1].Estado = "Recibido"
+					delivery(carga)
+				}
+			}
+		}
+	}else{ //si ya se entregó minimo 1
+		if carga.pack[0].Estado != "En camino" && carga.pack[1].Estado != "En camino"{
+			carga.disponibilidad = 1
+			log.Printf("REPORTE: EL PAQUETE %s LO INTENTÓ %d VECES Y SU ESTADO ES %s",carga.pack[0].Idpaquete,carga.pack[0].Intentos,carga.pack[0].Estado)
+			log.Printf("REPORTE: EL PAQUETE %s LO INTENTÓ %d VECES Y SU ESTADO ES %s",carga.pack[1].Idpaquete,carga.pack[1].Intentos,carga.pack[1].Estado)
+			//volver a la central a reportarse
+		}else{
+			if carga.pack[0].Estado == "En camino"{
+				log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[0].Destino,carga.pack[0].Idpaquete)
+				carga.pack[0].Intentos = carga.pack[0].Intentos + 1
+				probabilidad := rand.Intn(100)
+				if probabilidad < 20 {
+					log.Printf("No se encontraba nadie en el domicilio %s :(",carga.pack[0].Destino)
+					if(carga.pack[0].Intentos == 3){
+						log.Printf("El paquete %s se cambia a No recibido",carga.pack[0].Idpaquete)
+						carga.pack[0].Estado = "No Recibido"
+					}
+					delivery(carga)
+				}else{
+					log.Printf("Se entregó el paquete %s en el domicilio %s :D",carga.pack[0].Idpaquete,carga.pack[0].Destino)
+					carga.pack[0].Estado = "Recibido"
+					delivery(carga)
+				}
+			}else{
+				log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[1].Destino,carga.pack[1].Idpaquete)
+				carga.pack[1].Intentos = carga.pack[1].Intentos + 1
+				probabilidad := rand.Intn(100)
+				if probabilidad < 20 {
+					log.Printf("No se encontraba nadie en el domicilio %s :(",carga.pack[1].Destino)
+					if(carga.pack[0].Intentos == 3){
+						log.Printf("El paquete %s se cambia a No recibido",carga.pack[1].Idpaquete)
+						carga.pack[1].Estado = "No Recibido"
+					}
+					delivery(carga)
+				}else{
+					log.Printf("Se entregó el paquete %s en el domicilio %s :D",carga.pack[1].Idpaquete,carga.pack[1].Destino)
+					carga.pack[1].Estado = "Recibido"
+					delivery(carga)
+				}
+			}
+		}
 	}
 }
 

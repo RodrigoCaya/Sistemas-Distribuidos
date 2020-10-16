@@ -144,7 +144,6 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 			}
 			i = i+1
 		}
-		log.Printf("Origen: %s    Destino: %s",p.origen,p.destino)
 		return &PaqueteRequest{Idpaquete: p.id_paquete,Idcamion: message.Idcamion,Seguimiento: p.id_seguimiento,Tipo: p.tipo,Valor: p.valor,Intentos: p.intentos,Estado: p.estado,Producto: p.producto,Origen: p.origen,Destino: p.destino}, nil
 	}else{
 		return &PaqueteRequest{Idpaquete: "No hay más paquetes"}, nil
