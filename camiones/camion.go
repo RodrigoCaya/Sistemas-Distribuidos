@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
+	"strconv"
 	"google.golang.org/grpc"
 	"golang.org/x/net/context"
 	"github.com/RodrigoCaya/Sistemas-Distribuidos/helloworld"
@@ -96,7 +98,6 @@ func main(){
 	i, err := strconv.Atoi(first)
 	if err != nil{
 		log.Printf("error al ingresar el valor: %v", err)
-		continue
 	}
 	log.Printf("Los camiones estan listos para partir")
 
