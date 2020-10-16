@@ -123,13 +123,16 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 			
 		}else if len(prioritario)!=0{
 			p, prioritario = prioritario[0], prioritario[1:] //pop
+			p.estado = "En camino"
 		}
 		
 	}else{ //si es camion normal
 		if len(prioritario)!=0{ 
 			p, prioritario = prioritario[0], prioritario[1:] //pop
+			p.estado = "En camino"
 		}else if len(no_prioritario)!=0{ 
 			p, no_prioritario = no_prioritario[0], no_prioritario[1:] //pop
+			p.estado = "En camino"
 		}else{//si estan las 3 colas vacias
 			vacio = 1
 		}
