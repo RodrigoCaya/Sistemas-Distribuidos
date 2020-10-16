@@ -36,7 +36,7 @@ func conexionca(){
 }
 
 func main(){
-	go conexioncl()
-	go conexionca()
+	conexioncl()
+	// conexionca()
 	
 }
