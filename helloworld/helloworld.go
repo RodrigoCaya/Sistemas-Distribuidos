@@ -116,7 +116,9 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 	p := Paquete{}
 	i := 0
 	if message.Tipo == "retail"{
+		log.Printf("entre 1")
 		if len(retail)!=0{
+			log.Printf("entre 2")
 			p, retail = retail[0], retail[1:] //pop
 			for{
 				if seguimientos[i].id_paquete == p.id_paquete{
