@@ -52,7 +52,6 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 		result = "Codigo de seguimiento de " + message.Producto + " es: " + codigo
 	}
 	
-	
 	f, err := os.OpenFile("../csv/registro.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
     if err != nil {
         log.Fatal(err)
@@ -94,6 +93,8 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 	}else{
 		prioritario = append(prioritario, paquete1)
 	}
+
+	log.Printf("Se recibió el paquete %s de tipo %s",strconv.Itoa(cont),message.Tipo)
 
 	return &Message{Id: result}, nil
 }
