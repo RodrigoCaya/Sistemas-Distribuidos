@@ -1,42 +1,13 @@
-3,retail,110,tienda-C,casa-C,1
-4,retail,95,tienda-A,casa-D,2
-2,retail,12,tienda-B,casa-B,1
-4,retail,95,tienda-A,casa-D,1
-5,retail,8,pyme,casa-E,1
-5,retail,8,pyme,casa-E,2
-5,retail,8,pyme,casa-E,3
-5,retail,8,pyme,casa-E,4
-5,retail,8,pyme,casa-E,5
-5,retail,8,pyme,casa-E,6
-5,retail,8,pyme,casa-E,7
-5,retail,8,pyme,casa-E,8
-5,retail,8,pyme,casa-E,9
-5,retail,8,pyme,casa-E,10
-5,retail,8,pyme,casa-E,11
-5,retail,8,pyme,casa-E,12
-5,retail,8,pyme,casa-E,13
-5,retail,8,pyme,casa-E,14
-5,retail,8,pyme,casa-E,15
-5,retail,8,pyme,casa-E,16
-5,retail,8,pyme,casa-E,17
-5,retail,8,pyme,casa-E,18
-6,retail,50,pyme,casa-B,2,2020-10-17 14:18:30
-8,retail,10,pyme,casa-N,1,2020-10-17 14:36:57
-10,retail,25,pyme,casa-P,1,2020-10-17 14:36:57
-5,retail,8,pyme,casa-E,1,0
-10,retail,25,pyme,casa-P,1,2020-10-17 16:53:47
-18,retail,11,pyme,casa-V,1,2020-10-17 16:54:07
-19,retail,15,pyme,casa-Z,1,0
-26,retail,14,pyme,casa-C,1,0
-33,retail,3,pyme,casa-C,1,0
-35,retail,12,tienda-B,casa-B,2,2020-10-17 16:56:29
-37,retail,95,tienda-A,casa-D,1,2020-10-17 16:56:29
-38,retail,100,tienda-B,casa-Q,1,2020-10-17 16:56:41
-40,retail,20,tienda-B,casa-C,1,2020-10-17 16:56:41
-42,retail,20,tienda-A,casa-F,1,2020-10-17 16:56:53
-44,retail,25,tienda-C,casa-A,2,2020-10-17 16:56:53
-46,retail,6,tienda-C,casa-N,2,2020-10-17 16:57:05
-48,retail,50,tienda-C,casa-C,1,2020-10-17 16:57:05
-50,retail,30,tienda-A,casa-A,1,2020-10-17 16:57:17
-52,retail,90,tienda-A,casa-S,2,2020-10-17 16:57:17
-6,retail,50,pyme,casa-B,2,2020-10-17 18:14:44
+29,retail,10,tienda-A,casa-A,1,2020-10-17 18:27:25
+34,retail,95,tienda-A,casa-D,1,2020-10-17 18:27:32
+37,retail,15,tienda-C,casa-A,1,2020-10-17 18:27:32
+41,retail,5,tienda-C,casa-P,2,2020-10-17 18:27:39
+44,retail,25,tienda-C,casa-A,1,2020-10-17 18:27:46
+45,retail,15,tienda-A,casa-N,1,2020-10-17 18:27:46
+48,retail,50,tienda-C,casa-C,1,2020-10-17 18:27:53
+49,retail,25,tienda-C,casa-E,1,2020-10-17 18:27:53
+51,retail,105,tienda-C,casa-C,1,2020-10-17 18:28:00
+53,retail,115,tienda-B,casa-A,1,2020-10-17 18:28:00
+35,retail,12,tienda-B,casa-B,1,2020-10-17 18:49:22
+22,prioritario,11,pyme,casa-C,1,0
+36,retail,110,tienda-C,casa-C,1,2020-10-17 18:49:27

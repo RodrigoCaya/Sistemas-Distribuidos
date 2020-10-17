@@ -81,7 +81,7 @@ func reporte(carga Camion){ //falta agregar la hora de entrega
 		}
 		intent = strconv.Itoa(int(carga.pack[i].Intentos))
 		
-		_, err = f.Write([]byte(carga.pack[i].Idpaquete+","+carga.tipo+","+carga.pack[i].Valor+","+carga.pack[i].Origen+","+carga.pack[i].Destino+","+intent+","+carga.pack[i].Tiempo+"\n"))
+		_, err = f.Write([]byte(carga.pack[i].Idpaquete+","+carga.pack[i].Tipo+","+carga.pack[i].Valor+","+carga.pack[i].Origen+","+carga.pack[i].Destino+","+intent+","+carga.pack[i].Tiempo+"\n"))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -121,7 +121,6 @@ func reportarse(carga Camion, c helloworld.HelloworldServiceClient)(nueva_carga 
 			log.Fatalf("Error when calling EnviarPaquete: %s", err)
 		}
 		if response.Code == "ok"{
-			continue
 		}
 		_, carga.pack = carga.pack[0], carga.pack[1:] //pop
 	}
@@ -260,7 +259,6 @@ func delivery1(carga Camion, t_envio int)(nueva_carga Camion){
 
 func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int, t_envio int){
 	for{
-		estado_camiones()
 		message := helloworld.PaqueteRequest{
 			Idcamion: camiones[i].id,
 			Idpaquete: camiones[i].restriccion,
@@ -274,23 +272,29 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int, t_envio i
 		if err != nil{
 			log.Printf("El valor del paquete no es un número: %v", err)
 		}
-		
+		if len(camiones[i].pack) == 1{
+			estado_camiones()
+			time.Sleep(time.Duration(tiempo) * time.Second)
+		}
 		if response.Idpaquete != "No hay más paquetes" {
 			camiones[i].pack = append(camiones[i].pack, response)
 		}else{
 			if len(camiones[i].pack) == 1{
 				//salir a hacer delivery
+				estado_camiones()
 				camiones[i] = delivery1(camiones[i],t_envio)
+				estado_camiones()
 				camiones[i] = reportarse(camiones[i],c)
-			}else if len(camiones[i].pack) == 0 {
 			}
 		}
 		if len(camiones[i].pack) == 2 {
 			//salir a hacer delivery
+			estado_camiones()
 			camiones[i] = delivery(camiones[i],t_envio)
+			estado_camiones()
 			camiones[i] = reportarse(camiones[i],c)
 		}
-		time.Sleep(time.Duration(tiempo) * time.Second)
+		
 	}
 }
 
@@ -344,7 +348,7 @@ func main(){
 	if err != nil{
 		log.Printf("error al ingresar el valor: %v", err)
 	}
-
+	estado_camiones()
 	go conectar(1,c,espera_msj,espera_envio)
 
 	go conectar(2,c,espera_msj,espera_envio)

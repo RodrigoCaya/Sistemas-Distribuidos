@@ -128,7 +128,7 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 			p.estado = "En camino"
 			aux = "1"
 		}else{
-			log.Printf("entree")
+			// log.Printf("entree")
 			vacio = 1
 		}
 		
