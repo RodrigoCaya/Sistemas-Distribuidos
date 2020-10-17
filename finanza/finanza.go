@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-
+	"time"
 	"github.com/streadway/amqp"
 )
 
