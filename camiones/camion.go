@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	// "os"
+	"os"
 	"log"
 	"time"
 	"strconv"
@@ -21,36 +21,33 @@ type Camion struct{
 
 var camiones []Camion
 
-// func reporte(carga Camion){ //falta agregar la hora de entrega
-// 	intent := ""
-// 	nombre := "registro"+carga.id+".csv"
-// 	f, err := os.OpenFile(nombre, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
-// 	i := 0
-// 	v := len(carga.pack)
-// 	for{
-// 		if i >= v {
-// 			break
-// 		}
-// 		intent = strconv.Itoa(int(carga.pack[i].Intentos))
+func reporte(carga Camion){ //falta agregar la hora de entrega
+	intent := ""
+	nombre := "registro"+carga.id+".csv"
+	f, err := os.OpenFile(nombre, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+	i := 0
+	v := len(carga.pack)
+	for{
+		if i >= v {
+			break
+		}
+		intent = strconv.Itoa(int(carga.pack[i].Intentos))
 		
-// 		_, err = f.Write([]byte(carga.pack[i].Idpaquete+","+carga.tipo+","+carga.pack[i].Valor+","+carga.pack[i].Origen+","+carga.pack[i].Destino+","+intent+"\n"))
-// 		if err != nil {
-// 			log.Fatal(err)
-// 		}
-// 		i = i+1
-// 	}
-// 	f.Close()
-// }
+		_, err = f.Write([]byte(carga.pack[i].Idpaquete+","+carga.tipo+","+carga.pack[i].Valor+","+carga.pack[i].Origen+","+carga.pack[i].Destino+","+intent+","+carga.pack[i].Tiempo+"\n"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		i = i+1
+	}
+	f.Close()
+}
 
 func reportarse(carga Camion, c helloworld.HelloworldServiceClient)(nueva_carga Camion){
-
-	i := len(carga.pack) -1
-
+	reporte(carga)
 	for{
-		log.Printf("LARGO1 ES %d",len(carga.pack))
 		if len(carga.pack) == 0 {
 			break
 		}
@@ -72,14 +69,10 @@ func reportarse(carga Camion, c helloworld.HelloworldServiceClient)(nueva_carga 
 			log.Fatalf("Error when calling EnviarPaquete: %s", err)
 		}
 		if response.Code == "ok"{
-			log.Printf("El camión %s envió los paquetes a la central",carga.id)
+			log.Printf("El camión %s envió un paquete a la central",carga.id)
 		}
-		i = i-1
-		log.Printf("LARGO2 ES %d",len(carga.pack))
 		
 		_, carga.pack = carga.pack[0], carga.pack[1:] //pop
-		
-		log.Printf("LARGO3 ES %d",len(carga.pack))
 	}
 	nueva_carga = carga
 	return
@@ -114,26 +107,29 @@ func tirar_dados(carga Camion, i int)(nueva_carga Camion){
 			if carga.pack[i].Intentos == 3{
 				log.Printf("El paquete %s se cambia a No recibido",carga.pack[i].Idpaquete)
 				carga.pack[i].Estado = "No Recibido"
+				carga.pack[i].Tiempo = "0"
 			}
 		}else{
 			log.Printf("El paquete %s se cambia a No recibido",carga.pack[i].Idpaquete)
 			carga.pack[i].Estado = "No Recibido"
+			carga.pack[i].Tiempo = "0"
 		}
 		nueva_carga = carga
 		return
-		// delivery(carga)
 	}else{
 		log.Printf("Se entregó el paquete %s en el domicilio %s :D",carga.pack[i].Idpaquete,carga.pack[i].Destino)
 		carga.pack[i].Estado = "Recibido"
+		tiempo := time.Now()
+		carga.pack[i].Tiempo = tiempo.Format("2006-01-02 15:04:05")
 		nueva_carga = carga
 		return
-		// delivery(carga)
 	}
 	nueva_carga = carga
 	return
 }
 
-func delivery(carga Camion)(nueva_carga Camion){
+func delivery(carga Camion, t_envio int)(nueva_carga Camion){
+	time.Sleep(time.Duration(t_envio) * time.Second)
 	for{
 		valor0, err := strconv.Atoi(carga.pack[0].Valor)
 		if err != nil{
@@ -160,11 +156,8 @@ func delivery(carga Camion)(nueva_carga Camion){
 		}else{ //si ya se entregó minimo 1
 			if carga.pack[0].Estado != "En camino" && carga.pack[1].Estado != "En camino"{
 				carga.disponibilidad = 1
-				log.Printf("REPORTE: EL PAQUETE %s LO INTENTÓ %d VECES Y SU ESTADO ES %s",carga.pack[0].Idpaquete,carga.pack[0].Intentos,carga.pack[0].Estado)
-				log.Printf("REPORTE: EL PAQUETE %s LO INTENTÓ %d VECES Y SU ESTADO ES %s",carga.pack[1].Idpaquete,carga.pack[1].Intentos,carga.pack[1].Estado)
-				// nueva_carga = carga
-				// return
-				//volver a la central a reportarse
+				// log.Printf("REPORTE: EL PAQUETE %s LO INTENTÓ %d VECES Y SU ESTADO ES %s",carga.pack[0].Idpaquete,carga.pack[0].Intentos,carga.pack[0].Estado)
+				// log.Printf("REPORTE: EL PAQUETE %s LO INTENTÓ %d VECES Y SU ESTADO ES %s",carga.pack[1].Idpaquete,carga.pack[1].Intentos,carga.pack[1].Estado)
 				break
 			}else{
 				if carga.pack[0].Estado == "En camino"{
@@ -174,13 +167,13 @@ func delivery(carga Camion)(nueva_carga Camion){
 				}
 			}
 		}
-
 	}
 	nueva_carga = carga
 	return
 }
 
-func delivery1(carga Camion)(nueva_carga Camion){
+func delivery1(carga Camion, t_envio int)(nueva_carga Camion){
+	time.Sleep(time.Duration(t_envio) * time.Second)
 	for{
 		log.Printf("El camión %s fue a %s a enviar el paquete %s",carga.id,carga.pack[0].Destino,carga.pack[0].Idpaquete)
 		carga.pack[0].Intentos = carga.pack[0].Intentos + 1
@@ -191,18 +184,22 @@ func delivery1(carga Camion)(nueva_carga Camion){
 				if carga.pack[0].Intentos == 3 {
 					log.Printf("El paquete %s se cambia a No recibido",carga.pack[0].Idpaquete)
 					carga.pack[0].Estado = "No Recibido"
+					carga.pack[0].Tiempo = "0"
 					nueva_carga = carga
 					return
 				}
 			}else{
 				log.Printf("El paquete %s se cambia a No recibido",carga.pack[0].Idpaquete)
 				carga.pack[0].Estado = "No Recibido"
+				carga.pack[0].Tiempo = "0"
 				nueva_carga = carga
 				return
 			}
 		}else{
 			log.Printf("Se entregó el paquete %s en el domicilio %s :D",carga.pack[0].Idpaquete,carga.pack[0].Destino)
 			carga.pack[0].Estado = "Recibido"
+			tiempo := time.Now()
+			carga.pack[0].Tiempo = tiempo.Format("2006-01-02 15:04:05")
 			nueva_carga = carga
 			return
 		}
@@ -212,9 +209,9 @@ func delivery1(carga Camion)(nueva_carga Camion){
 	return
 }
 
-func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
+func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int, t_envio int){
 	for{
-		log.Printf("EL CAMION %s TIENE %d CARGAS",camiones[i].id,len(camiones[i].pack))
+		// log.Printf("EL CAMION %s TIENE %d CARGAS",camiones[i].id,len(camiones[i].pack))
 		message := helloworld.PaqueteRequest{
 			Idcamion: camiones[i].id,
 			Tipo: camiones[i].tipo,
@@ -234,9 +231,8 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
 				log.Printf("El camión %s fue a hacer su entrega",camiones[i].id)
 				camiones[i].disponibilidad = 0
 				//salir a hacer delivery
-				camiones[i] = delivery1(camiones[i])
+				camiones[i] = delivery1(camiones[i],t_envio)
 				camiones[i] = reportarse(camiones[i],c)
-				log.Printf("SALIII")
 			}else if len(camiones[i].pack) == 0 {
 				log.Printf("El camión %s esta vacío",camiones[i].id)
 			}
@@ -245,9 +241,8 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int){
 			log.Printf("El camión %s fue a hacer su entrega",camiones[i].id)
 			camiones[i].disponibilidad = 0
 			//salir a hacer delivery
-			camiones[i] = delivery(camiones[i])
+			camiones[i] = delivery(camiones[i],t_envio)
 			camiones[i] = reportarse(camiones[i],c)
-			log.Printf("SALIII")
 		}
 		time.Sleep(time.Duration(tiempo) * time.Second)
 	}
@@ -291,19 +286,23 @@ func main(){
 	fmt.Println("Indique el intervalo de tiempo de espera de los camiones: ") 
 	var first string 	  
 	fmt.Scanln(&first)
-	i, err := strconv.Atoi(first)
+	espera_msj, err := strconv.Atoi(first)
 	if err != nil{
 		log.Printf("error al ingresar el valor: %v", err)
 	}
-	log.Printf("Los camiones estan listos para partir")
-
-	go conectar(1,c,i)
-
-	go conectar(2,c,i)
-
-	conectar(0,c,i)
-
 	
+	fmt.Println("Indique el tiempo que demora un envío: ") 
+	var sec string
+	fmt.Scanln(&sec)
+	espera_envio, err := strconv.Atoi(sec)
+	if err != nil{
+		log.Printf("error al ingresar el valor: %v", err)
+	}
 
+	go conectar(1,c,espera_msj,espera_envio)
+
+	go conectar(2,c,espera_msj,espera_envio)
+
+	conectar(0,c,espera_msj,espera_envio)
 }
 
