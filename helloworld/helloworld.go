@@ -118,13 +118,15 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 	p := Paquete{}
 	i := 0
 	vacio := 0
+	aux := "0"
 	if message.Tipo == "retail"{ //si es camion retail
 		if len(retail)!=0{
 			p, retail = retail[0], retail[1:] //pop
 			p.estado = "En camino"
-		}else if len(prioritario)!=0{
+		}else if len(prioritario)!=0 && message.Idpaquete == "0"{
 			p, prioritario = prioritario[0], prioritario[1:] //pop
 			p.estado = "En camino"
+			aux = "1"
 		}else{
 			vacio = 1
 		}
@@ -150,7 +152,7 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 			}
 			i = i+1
 		}
-		return &PaqueteRequest{Idpaquete: p.id_paquete,Idcamion: message.Idcamion,Seguimiento: p.id_seguimiento,Tipo: p.tipo,Valor: p.valor,Intentos: p.intentos,Estado: p.estado,Producto: p.producto,Origen: p.origen,Destino: p.destino}, nil
+		return &PaqueteRequest{Idpaquete: p.id_paquete,Idcamion: message.Idcamion,Seguimiento: p.id_seguimiento,Tipo: p.tipo,Valor: p.valor,Intentos: p.intentos,Estado: p.estado,Producto: p.producto,Origen: p.origen,Destino: p.destino, Tiempo: aux}, nil
 	}else{
 		return &PaqueteRequest{Idpaquete: "No hay más paquetes"}, nil
 	}
