@@ -159,6 +159,15 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 
 
 func (s *Server) EnviarDatos(ctx context.Context, message *PaqueteRequest) (*CodeRequest, error) {
+	i := 0
+	for{
+		if seguimientos[i].id_paquete == message.Idpaquete{
+			seguimientos[i].estado_paquete = message.Estado
+			seguimientos[i].cant_intentos = message.Intentos
+			break
+		}
+		i = i+1
+	}
 	//enviar datos a finanzas
 	log.Printf("PROBANDO %s %s",message.Idcamion,message.Idpaquete)
 	return &CodeRequest{Code: "ok"}, nil
