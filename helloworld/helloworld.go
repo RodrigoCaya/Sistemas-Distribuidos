@@ -128,6 +128,7 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 			p.estado = "En camino"
 			aux = "1"
 		}else{
+			log.Printf("entree")
 			vacio = 1
 		}
 		
@@ -171,6 +172,6 @@ func (s *Server) EnviarDatos(ctx context.Context, message *PaqueteRequest) (*Cod
 		i = i+1
 	}
 	//enviar datos a finanzas
-	log.Printf("PROBANDO %s %s",message.Idcamion,message.Idpaquete)
+	//log.Printf("PROBANDO %s %s",message.Idcamion,message.Idpaquete)
 	return &CodeRequest{Code: "ok"}, nil
 }

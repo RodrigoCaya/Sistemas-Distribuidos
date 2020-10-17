@@ -16,7 +16,7 @@ type Camion struct{
 	id string
 	tipo string
 	pack []*helloworld.PaqueteRequest
-	restriccion int
+	restriccion string
 }
 
 var camiones []Camion
@@ -93,10 +93,10 @@ func reporte(carga Camion){ //falta agregar la hora de entrega
 func reportarse(carga Camion, c helloworld.HelloworldServiceClient)(nueva_carga Camion){
 	reporte(carga)
 	if carga.pack[0].Tipo == "retail" {
-		carga.restriccion = 0
+		carga.restriccion = "0"
 	}else if len(carga.pack) == 2 {
 		if carga.pack[1].Tipo == "retail"{
-			carga.restriccion = 0
+			carga.restriccion = "0"
 		}
 	}
 	for{
@@ -263,15 +263,14 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int, t_envio i
 		estado_camiones()
 		message := helloworld.PaqueteRequest{
 			Idcamion: camiones[i].id,
-			Idpaquete: strconv.Itoa(camiones[i].restriccion),
+			Idpaquete: camiones[i].restriccion,
 			Tipo: camiones[i].tipo,
 		}
 		response, err := c.EnviarPaquete(context.Background(), &message)
 		if err != nil {
 			log.Fatalf("Error when calling EnviarPaquete: %s", err)
 		}
-		aux , err := strconv.Atoi(response.Tiempo)
-		camiones[i].restriccion = aux
+		camiones[i].restriccion = response.Tiempo
 		if err != nil{
 			log.Printf("El valor del paquete no es un número: %v", err)
 		}
@@ -309,21 +308,21 @@ func main(){
 		id: "r1",
 		tipo: "retail",
 		pack: nil,
-		restriccion: 1,
+		restriccion: "1",
 	}
 	
 	camionr2 := Camion{
 		id: "r2",
 		tipo: "retail",
 		pack: nil,
-		restriccion: 1,
+		restriccion: "1",
 	}
 
 	camion := Camion{
 		id: "n1",
 		tipo: "normal",
 		pack: nil,
-		restriccion: 0,
+		restriccion: "0",
 	}
 
 	camiones = append(camiones, camionr1)
