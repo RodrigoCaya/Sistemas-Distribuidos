@@ -4,7 +4,9 @@ import (
 	"os"
 	"log"
 	"strconv"
+	"fmt"
 	"time"
+	"github.com/streadway/amqp"
 	"golang.org/x/net/context"
 )
 
@@ -94,7 +96,7 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 		prioritario = append(prioritario, paquete1)
 	}
 
-	log.Printf("Se recibió el paquete %s de tipo %s",strconv.Itoa(cont),message.Tipo)
+	// log.Printf("Se recibió el paquete %s de tipo %s",strconv.Itoa(cont),message.Tipo)
 
 	return &Message{Id: result}, nil
 }
@@ -160,6 +162,44 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 	//Se puede asignar un paquete prioritario a los camiones de retail tras volver de una entrega con paquetes de retail.
 }
 
+func failOnError(err error, msg string) {
+	if err != nil {
+		log.Fatalf("%s: %s", msg, err)
+		panic(fmt.Sprintf("%s: %s", msg, err))
+	}
+}
+
+func conexionFinanza(message *PaqueteRequest){
+	conn, err := amqp.Dial("amqp://test:test@10.6.40.154:5672/")
+	failOnError(err, "Failed to connect to RabbitMQ")
+	defer conn.Close()
+
+	ch, err := conn.Channel()
+	failOnError(err, "Failed to open a channel")
+	defer ch.Close()
+
+	q, err := ch.QueueDeclare(
+		"hello-queue", // name
+		false,         // durable
+		false,         // delete when unused
+		false,         // exclusive
+		false,         // no-wait
+		nil,           // arguments
+	)
+	failOnError(err, "Failed to declare a queue") 
+	body := "{"+message.Estado+","+strconv.Itoa(int(message.Intentos))+","+message.Valor+","+message.Tipo+"}"
+	err = ch.Publish(
+		"",     // exchange
+		q.Name, // routing key
+		false,  // mandatory
+		false,  // immediate
+		amqp.Publishing{
+			ContentType: "application/json",
+			Body:        []byte(body),
+		})
+	// log.Printf(" [x] Sent %s", body)
+	failOnError(err, "Failed to publish a message")
+}
 
 func (s *Server) EnviarDatos(ctx context.Context, message *PaqueteRequest) (*CodeRequest, error) {
 	i := 0
@@ -171,6 +211,7 @@ func (s *Server) EnviarDatos(ctx context.Context, message *PaqueteRequest) (*Cod
 		}
 		i = i+1
 	}
+	conexionFinanza(message)
 	//enviar datos a finanzas
 	//log.Printf("PROBANDO %s %s",message.Idcamion,message.Idpaquete)
 	return &CodeRequest{Code: "ok"}, nil
