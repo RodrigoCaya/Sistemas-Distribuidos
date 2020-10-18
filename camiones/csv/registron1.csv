@@ -1,31 +1,33 @@
-1,prioritario,15,pyme,casa-K,1,2020-10-18 18:14:34
-2,prioritario,8,pyme,casa-A,1,2020-10-18 18:14:34
-5,prioritario,8,pyme,casa-E,1,2020-10-18 18:14:34
-6,prioritario,50,pyme,casa-B,1,2020-10-18 18:14:34
-8,prioritario,10,pyme,casa-N,1,2020-10-18 18:14:34
-10,prioritario,25,pyme,casa-P,1,2020-10-18 18:14:34
-13,prioritario,115,pyme,casa-I,1,2020-10-18 18:14:34
-14,prioritario,9,pyme,casa-C,1,2020-10-18 18:14:34
-18,prioritario,11,pyme,casa-V,1,2020-10-18 18:14:34
-19,prioritario,15,pyme,casa-Z,1,2020-10-18 18:14:34
-22,prioritario,11,pyme,casa-C,1,2020-10-18 18:14:34
-26,prioritario,14,pyme,casa-C,1,0
-33,prioritario,3,pyme,casa-C,1,2020-10-18 18:14:34
-3,normal,10,pyme,casa-A,1,2020-10-18 18:14:34
-4,normal,10,pyme,casa-D,1,2020-10-18 18:14:34
-7,normal,75,pyme,casa-N,1,2020-10-18 18:14:34
-9,normal,20,pyme,casa-S,1,2020-10-18 18:14:34
-11,normal,22,pyme,casa-R,1,2020-10-18 18:14:34
-12,normal,90,pyme,casa-N,1,2020-10-18 18:14:34
-15,normal,5,pyme,casa-C,1,2020-10-18 18:14:34
-16,normal,4,pyme,casa-I,1,2020-10-18 18:14:34
-17,normal,16,pyme,casa-E,1,2020-10-18 18:14:34
-21,normal,9,pyme,casa-F,1,0
-23,normal,17,pyme,casa-U,1,2020-10-18 18:14:34
-25,normal,16,pyme,casa-X,1,0
-27,normal,10,pyme,casa-A,1,2020-10-18 18:14:34
-28,normal,7,pyme,casa-Q,1,2020-10-18 18:14:34
-29,normal,4,pyme,casa-B,1,0
-30,normal,5,pyme,casa-A,1,2020-10-18 18:14:34
-31,normal,5,pyme,casa-L,1,2020-10-18 18:14:34
-32,normal,6,pyme,casa-D,1,0
+67,prioritario,15,pyme,casa-K,1,2020-10-18 20:28:34
+68,prioritario,8,pyme,casa-A,1,2020-10-18 20:28:34
+71,prioritario,8,pyme,casa-E,1,0
+72,prioritario,50,pyme,casa-B,1,2020-10-18 20:28:34
+74,prioritario,10,pyme,casa-N,1,2020-10-18 20:28:34
+76,prioritario,25,pyme,casa-P,1,2020-10-18 20:28:34
+79,prioritario,115,pyme,casa-I,1,2020-10-18 20:28:34
+80,prioritario,9,pyme,casa-C,1,0
+84,prioritario,11,pyme,casa-V,2,2020-10-18 20:28:34
+85,prioritario,15,pyme,casa-Z,1,2020-10-18 20:28:34
+86,prioritario,18,pyme,casa-Y,1,2020-10-18 20:28:34
+88,prioritario,11,pyme,casa-C,1,2020-10-18 20:28:34
+90,prioritario,6,pyme,casa-A,1,0
+92,prioritario,14,pyme,casa-C,1,2020-10-18 20:28:34
+99,prioritario,3,pyme,casa-C,1,2020-10-18 20:28:34
+69,normal,10,pyme,casa-A,1,2020-10-18 20:28:34
+70,normal,10,pyme,casa-D,1,2020-10-18 20:28:34
+73,normal,75,pyme,casa-N,2,2020-10-18 20:28:34
+75,normal,20,pyme,casa-S,1,2020-10-18 20:28:34
+77,normal,22,pyme,casa-R,1,2020-10-18 20:28:34
+78,normal,90,pyme,casa-N,1,2020-10-18 20:28:34
+81,normal,5,pyme,casa-C,1,2020-10-18 20:28:34
+82,normal,4,pyme,casa-I,1,2020-10-18 20:28:34
+83,normal,16,pyme,casa-E,1,2020-10-18 20:28:34
+87,normal,9,pyme,casa-F,1,0
+89,normal,17,pyme,casa-U,1,2020-10-18 20:28:34
+91,normal,16,pyme,casa-X,1,2020-10-18 20:28:34
+93,normal,10,pyme,casa-A,1,0
+94,normal,7,pyme,casa-Q,1,2020-10-18 20:28:34
+95,normal,4,pyme,casa-B,1,2020-10-18 20:28:34
+96,normal,5,pyme,casa-A,1,2020-10-18 20:28:34
+97,normal,5,pyme,casa-L,1,2020-10-18 20:28:34
+98,normal,6,pyme,casa-D,1,2020-10-18 20:28:34

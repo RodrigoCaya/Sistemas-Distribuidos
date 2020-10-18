@@ -148,7 +148,7 @@ func vale_la_pena(pakete *helloworld.PaqueteRequest)(res int){
 		if err != nil{
 			log.Printf("El valor del paquete no es un número: %v", err)
 		}
-		if int32(valor) > (pakete.Intentos+1)*10{
+		if int32(valor) > (pakete.Intentos)*10{
 			res = 1
 			return
 		}else{
@@ -163,6 +163,7 @@ func vale_la_pena(pakete *helloworld.PaqueteRequest)(res int){
 func tirar_dados(carga Camion, i int)(nueva_carga Camion){
 	carga.pack[i].Intentos = carga.pack[i].Intentos + 1
 	probabilidad := rand.Intn(100)
+	log.Printf("LA PROBABILIDAD 1 ES %d",probabilidad)
 	if probabilidad < 20 {
 		if vale_la_pena(carga.pack[i]) == 1{
 			if carga.pack[i].Intentos == 3{
@@ -236,6 +237,7 @@ func delivery1(carga Camion, t_envio int)(nueva_carga Camion){
 	for{
 		carga.pack[0].Intentos = carga.pack[0].Intentos + 1
 		probabilidad := rand.Intn(100)
+		log.Printf("LA PROBABILIDAD 2 ES %d",probabilidad)
 		if probabilidad < 20 {
 			if vale_la_pena(carga.pack[0]) == 1{
 				if carga.pack[0].Intentos == 3 {
@@ -293,6 +295,7 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int, t_envio i
 				camiones[i] = delivery1(camiones[i],t_envio)
 				estado_camiones()
 				camiones[i] = reportarse(camiones[i],c)
+				estado_camiones()
 			}
 		}
 		if len(camiones[i].pack) == 2 {
@@ -301,6 +304,7 @@ func conectar(i int, c helloworld.HelloworldServiceClient, tiempo int, t_envio i
 			camiones[i] = delivery(camiones[i],t_envio)
 			estado_camiones()
 			camiones[i] = reportarse(camiones[i],c)
+			estado_camiones()
 		}
 		
 	}
