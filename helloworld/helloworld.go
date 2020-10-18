@@ -6,11 +6,20 @@ import (
 	"strconv"
 	"fmt"
 	"time"
+	"encoding/json"
 	"github.com/streadway/amqp"
 	"golang.org/x/net/context"
 )
 
 type Server struct{
+}
+
+type Finan struct {
+	Estado string `json:"estado"`
+	Intentos string `json:"intento"`
+	Valor string `json:"valor"`
+	Tipo string `json:"tipo"`
+	Id string `json:"id"`
 }
 
 type Seguimiento struct{
@@ -95,9 +104,6 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 	}else{
 		prioritario = append(prioritario, paquete1)
 	}
-
-	// log.Printf("Se recibió el paquete %s de tipo %s",strconv.Itoa(cont),message.Tipo)
-
 	return &Message{Id: result}, nil
 }
 
@@ -187,7 +193,25 @@ func conexionFinanza(message *PaqueteRequest){
 		nil,           // arguments
 	)
 	failOnError(err, "Failed to declare a queue") 
-	body := "{"+message.Estado+","+strconv.Itoa(int(message.Intentos))+","+message.Valor+","+message.Tipo+"}"
+	// body := "{"+message.Estado+","+strconv.Itoa(int(message.Intentos))+","+message.Valor+","+message.Tipo+"}"
+	// err = ch.Publish(
+	// 	"",     // exchange
+	// 	q.Name, // routing key
+	// 	false,  // mandatory
+	// 	false,  // immediate
+	// 	amqp.Publishing{
+	// 		ContentType: "application/json",
+	// 		Body:        []byte(body),
+	// 	})
+	// // log.Printf(" [x] Sent %s", body)
+	// failOnError(err, "Failed to publish a message")
+
+	mensaje := Finan{Estado: message.Estado, Intentos: strconv.Itoa(int(message.Intentos)), Valor: message.Valor, Tipo: message.Tipo, Id: message.Idpaquete}
+
+	body, err := json.Marshal(mensaje)
+	if err != nil {
+		fmt.Println(err)
+	}
 	err = ch.Publish(
 		"",     // exchange
 		q.Name, // routing key
@@ -195,9 +219,8 @@ func conexionFinanza(message *PaqueteRequest){
 		false,  // immediate
 		amqp.Publishing{
 			ContentType: "application/json",
-			Body:        []byte(body),
+			Body:        body,
 		})
-	// log.Printf(" [x] Sent %s", body)
 	failOnError(err, "Failed to publish a message")
 }
 
