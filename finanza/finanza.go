@@ -5,13 +5,13 @@ import (
 	"log"
 	"os"
 	"io"
-	// "strings"
 	"strconv"
 	"encoding/json"
 	"encoding/csv"
 	"github.com/streadway/amqp"
 )
 
+//Estructura para el marshalling/unmarshalling de json
 type Finan struct {
 	Estado string `json:"estado"`
 	Intentos  string `json:"intento"`
@@ -20,6 +20,8 @@ type Finan struct {
 	Id string `json:"id"`
 }
 
+//Muestra el error en pantalla si ocurre un fallo en la conexión con rabbitMQ
+
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
@@ -27,8 +29,9 @@ func failOnError(err error, msg string) {
 	}
 }
 
+//Calcula el balance total según el registro recibido por parte de logística
+
 func balancetotal(){
-	// Open the file
 	csvfile, err := os.Open("csv/registro.csv")
 	if err != nil {
 		log.Fatalln("Couldn't open the csv file", err)
@@ -36,7 +39,6 @@ func balancetotal(){
 	r := csv.NewReader(csvfile)
 	total := float64(0)
 	for {
-		// Read each record from csv
 		record, err := r.Read()
 		if err == io.EOF {
 			break
@@ -49,11 +51,11 @@ func balancetotal(){
 			log.Fatal(err)
 		}
 		total = total + balance
-		// fmt.Printf("Question: %s Answer %s\n", record[0], record[1], record[2], record[3])
 	}
 	fmt.Printf("El balance total es %f \n",total)
 }
 
+//Agrega datos al csv y lo crea si no existe
 func registrocsv(valor1 string, valor2 string, valor3 string, valor4 string){
 	path := "csv/registro.csv"
 	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -66,6 +68,8 @@ func registrocsv(valor1 string, valor2 string, valor3 string, valor4 string){
 	}
 	f.Close()
 }
+
+//Setea la conexión con el emisor a través de RabbitMQ
 
 func conection(){
 	conn, err := amqp.Dial("amqp://test:test@10.6.40.154:5672/")
@@ -97,22 +101,16 @@ func conection(){
 	)
 	failOnError(err, "Failed to register a consumer")
 
-	// forever := make(chan bool)
-
 	go func() {
 		for d := range msgs {
-			// log.Printf("Received a message: %s", d.Body)
 			var respuesta Finan
 
 			err = json.Unmarshal([]byte(d.Body), &respuesta)
-
-			// log.Printf("ID:%s Intentos:%s",respuesta.Id, respuesta.Intentos)
 
 			recibidos := 0
 			intentos := 0
 			no_recibidos := 0
 			var balance float64
-			// var intentos int
 			
 			valor, err := strconv.Atoi(respuesta.Valor)
 			if err != nil {
@@ -131,8 +129,6 @@ func conection(){
 			}else{
 				balance = float64(valor)
 			}
-
-			// auxbalance := strconv.FormatFloat(balance, 'E', -1, 64)
 			s := fmt.Sprintf("%f", balance)
 			registrocsv(respuesta.Id,respuesta.Estado,respuesta.Intentos,s)
 		}
@@ -140,21 +136,10 @@ func conection(){
 }
 
 func main() {
-	//csv
-	//30%
-	//input para qe termine y muestre el valor final
-
 	go conection()
 	log.Printf("Presiona 0 para ver el balance total: ")
 	var first string 	  
 	fmt.Scanln(&first)
 	balancetotal()
-	//-----------------------------------------------------
-
-	
-
-
-	// log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
-	// <-forever
 	
 }

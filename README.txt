@@ -29,6 +29,7 @@ Instrucciones:
 
 Consideraciones generales:
 
+	-Se utiliza "protoc --go_out=plugins=grpc:helloworld helloworld/helloworld.proto" para compilar el archivo .proto.
 	-Las conexiones con RabbitMQ se encuentran activadas para las máquinas virtuales que nos proporcionaron, sin embargo dentro de logisitica y finanza se pueden ejecutar make activar y make desactivar.
 	-Todos los registros que piden en la tarea se encuentran en forma de csv dentro de una carpeta con el mismo nombre.
 	-El orden para ejecutar este programa es: primero logistica, luego cliente/camiones y al final finanza.

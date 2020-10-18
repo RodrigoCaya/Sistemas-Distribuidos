@@ -15,7 +15,7 @@ import (
 	"github.com/RodrigoCaya/Sistemas-Distribuidos/helloworld"
 )
 
-
+//Recoge los valores de pymes.csv y envia los datos al servidor
 func pym(conn *grpc.ClientConn, tiempo int){	
 	f, err := os.Open("csv/pymes.csv")
 	if err != nil{
@@ -32,6 +32,7 @@ func pym(conn *grpc.ClientConn, tiempo int){
 	}
 
 	for{
+		//lee los datos
 		record, err := r.Read()
 		if err == io.EOF {
 			break
@@ -43,6 +44,7 @@ func pym(conn *grpc.ClientConn, tiempo int){
 
 		c := helloworld.NewHelloworldServiceClient(conn)
 
+		//crea un mensaje
 		message := helloworld.Message{}
 		if record[5] == "1"{
 			message = helloworld.Message{
@@ -68,8 +70,7 @@ func pym(conn *grpc.ClientConn, tiempo int){
 			}
 		}
 
-
-
+		//envia los datos a la funcion SayHello del servidor
 		response, err := c.SayHello(context.Background(), &message)
 		if err != nil {
 			log.Fatalf("Error when calling SayHello: %s", err)
@@ -80,6 +81,7 @@ func pym(conn *grpc.ClientConn, tiempo int){
 	}
 }
 
+//Recoge los valores de retail.csv y envia los datos al servidor
 func ret(conn *grpc.ClientConn, tiempo int){	
 	f, err := os.Open("csv/retail.csv")
 	if err != nil{
@@ -96,6 +98,7 @@ func ret(conn *grpc.ClientConn, tiempo int){
 	}
 
 	for{
+		//lee los datos
 		record, err := r.Read()
 		if err == io.EOF {
 			break
@@ -117,6 +120,7 @@ func ret(conn *grpc.ClientConn, tiempo int){
 			Tipo: "retail",
 		}
 
+		//envia los datos a la funcion SayHello del servidor
 		response, err := c.SayHello(context.Background(), &message)
 		if err != nil {
 			log.Fatalf("Error when calling SayHello: %s", err)
@@ -127,6 +131,7 @@ func ret(conn *grpc.ClientConn, tiempo int){
 	}
 }
 
+//Manda un codigo de seguimiento al servidor para saber su estado
 func codigo(conn *grpc.ClientConn, codigo string){
 	c := helloworld.NewHelloworldServiceClient(conn)
 		

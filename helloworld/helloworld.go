@@ -14,6 +14,7 @@ import (
 type Server struct{
 }
 
+//struct utilizado para el marshalling/unmarshalling del json
 type Finan struct {
 	Estado string `json:"estado"`
 	Intentos string `json:"intento"`
@@ -50,6 +51,7 @@ var no_prioritario []Paquete
 
 var cont int = 0
 
+//Funcion utilizada para recibir paquetes del cliente y guardarlos en las colas (y en seguimiento)
 func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, error){
 	cont = cont + 1
 	result :=""
@@ -84,7 +86,6 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 	}
 	seguimientos = append(seguimientos, seguimiento1)
 
-	//agregar paquetes a colas
 	paquete1 := Paquete{
 		id_paquete: strconv.Itoa(cont),
 		id_seguimiento: codigo,
@@ -97,6 +98,7 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 		producto: message.Producto,
 	}
 	
+	//agregar paquetes a colas
 	if paquete1.tipo == "retail"{
 		retail = append(retail, paquete1)
 	}else if paquete1.tipo == "normal"{
@@ -107,6 +109,7 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 	return &Message{Id: result}, nil
 }
 
+//Funcion que busca y devuelve el estado de un paquete
 func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest, error) {
 	i := 0
 	result := "No se encontró el producto"
@@ -122,6 +125,7 @@ func (s *Server) Buscar(ctx context.Context, message *CodeRequest) (*CodeRequest
 	return &CodeRequest{Code: result}, nil
 }
 
+//Funcion que recibe el tipo del camion y envia un paquete a este camion
 func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*PaqueteRequest, error) {
 	p := Paquete{}
 	i := 0
@@ -136,7 +140,6 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 			p.estado = "En camino"
 			aux = "1"
 		}else{
-			// log.Printf("entree")
 			vacio = 1
 		}
 		
@@ -165,9 +168,9 @@ func (s *Server) EnviarPaquete(ctx context.Context, message *PaqueteRequest) (*P
 	}else{
 		return &PaqueteRequest{Idpaquete: "No hay más paquetes"}, nil
 	}
-	//Se puede asignar un paquete prioritario a los camiones de retail tras volver de una entrega con paquetes de retail.
 }
 
+//funcion auxiliar de la conexion RabbitMQ
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
@@ -175,6 +178,7 @@ func failOnError(err error, msg string) {
 	}
 }
 
+//Establece la conexion con RabbitMQ y manda los datos a finanzas en forma de marshalling
 func conexionFinanza(message *PaqueteRequest){
 	conn, err := amqp.Dial("amqp://test:test@10.6.40.154:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
@@ -193,21 +197,9 @@ func conexionFinanza(message *PaqueteRequest){
 		nil,           // arguments
 	)
 	failOnError(err, "Failed to declare a queue") 
-	// body := "{"+message.Estado+","+strconv.Itoa(int(message.Intentos))+","+message.Valor+","+message.Tipo+"}"
-	// err = ch.Publish(
-	// 	"",     // exchange
-	// 	q.Name, // routing key
-	// 	false,  // mandatory
-	// 	false,  // immediate
-	// 	amqp.Publishing{
-	// 		ContentType: "application/json",
-	// 		Body:        []byte(body),
-	// 	})
-	// // log.Printf(" [x] Sent %s", body)
-	// failOnError(err, "Failed to publish a message")
-
 	mensaje := Finan{Estado: message.Estado, Intentos: strconv.Itoa(int(message.Intentos)), Valor: message.Valor, Tipo: message.Tipo, Id: message.Idpaquete}
 
+	//Marshalling
 	body, err := json.Marshal(mensaje)
 	if err != nil {
 		fmt.Println(err)
@@ -224,6 +216,7 @@ func conexionFinanza(message *PaqueteRequest){
 	failOnError(err, "Failed to publish a message")
 }
 
+//Recibe los datos de los paquetes enviados por los camiones y actualiza el seguimiento
 func (s *Server) EnviarDatos(ctx context.Context, message *PaqueteRequest) (*CodeRequest, error) {
 	i := 0
 	for{
@@ -235,7 +228,5 @@ func (s *Server) EnviarDatos(ctx context.Context, message *PaqueteRequest) (*Cod
 		i = i+1
 	}
 	conexionFinanza(message)
-	//enviar datos a finanzas
-	//log.Printf("PROBANDO %s %s",message.Idcamion,message.Idpaquete)
 	return &CodeRequest{Code: "ok"}, nil
 }
