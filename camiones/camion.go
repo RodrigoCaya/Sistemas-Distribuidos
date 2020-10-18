@@ -68,7 +68,7 @@ func estado_camiones(){
 
 func reporte(carga Camion){ //falta agregar la hora de entrega
 	intent := ""
-	nombre := "registro"+carga.id+".csv"
+	nombre := "csv/registro"+carga.id+".csv"
 	f, err := os.OpenFile(nombre, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
