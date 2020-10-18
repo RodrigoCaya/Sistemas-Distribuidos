@@ -1,8 +1,8 @@
 run:
-        go run finanza.go
+	go run finanza.go
 
 clean:
-        rm csv/registro.csv
+	rm csv/registro.csv
 
 activar:
 	/sbin/service rabbitmq-server start

@@ -1,10 +1,11 @@
 run:
-        go run server.go
+	 go run server.go
 
 clean:
-        rm csv/registro.csv
+	rm csv/registro.csv
+
 activar:
-        /sbin/service rabbitmq-server start
+	/sbin/service rabbitmq-server start
 
 desactivar:
-        /sbin/service rabbitmq-server stop
+	/sbin/service rabbitmq-server stop
