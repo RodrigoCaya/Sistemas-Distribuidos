@@ -63,7 +63,7 @@ func (s *Server) SayHello(ctx context.Context, message *Message) (*Message, erro
 		result = "Codigo de seguimiento de " + message.Producto + " es: " + codigo
 	}
 	
-	f, err := os.OpenFile("../csv/registro.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile("../logistica/csv/registro.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
     if err != nil {
         log.Fatal(err)
 	}
