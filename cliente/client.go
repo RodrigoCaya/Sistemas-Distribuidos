@@ -155,53 +155,61 @@ func main() {
 	}
 	defer conn.Close()
 
+	var first string
+	var second string 
+	var tiempo1 string
+	var tiempo2 string
+	var thrd string 
 	for{
 		fmt.Println("-----------------")
 		fmt.Println("Escoge: ") 
 		fmt.Println("(1) Enviar pedidos") 
 		fmt.Println("(2) Buscar pedido")
+		fmt.Println("(0) Salir")
 		fmt.Println("-----------------")
-		var first string 	  
+		 	  
 		fmt.Scanln(&first)
 		if first == "1"{
 			fmt.Println("Escoge: ") 
 			fmt.Println("(1) Pymes") 
 			fmt.Println("(2) Retail")
 			fmt.Println("-----------------")
-			var second string 	  
+				  
 			fmt.Scanln(&second)
 			if second == "1"{
 				fmt.Println("Indique el intervalo de tiempo entre pedidos: ")
-				var tiempo1 string 	  
+				 	  
 				fmt.Scanln(&tiempo1)
 				i, err := strconv.Atoi(tiempo1)
 				if err != nil{
 					log.Printf("error al ingresar el valor: %v", err)
 					continue
 				}
-				pym(conn,i)
-				break
+				go pym(conn,i)
+				
 			}
 			if second == "2"{
 				fmt.Println("Indique el intervalo de tiempo entre pedidos: ")
-				var tiempo2 string 	  
+				 	  
 				fmt.Scanln(&tiempo2)
 				i, err := strconv.Atoi(tiempo2)
 				if err != nil{
 					log.Printf("error al ingresar el valor: %v", err)
 					continue
 				}
-				ret(conn,i)
-				break
+				go ret(conn,i)
+				
 			}
 		}
 		if first == "2"{
 			fmt.Println("Introduzca el código de seguimiento: ")
-			var thrd string 	  
+				  
 			fmt.Scanln(&thrd)
 			codigo(conn,thrd)
+			
+		}
+		if first == "0"{
 			break
 		}
-
 	} 	
 }
