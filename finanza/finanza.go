@@ -101,6 +101,7 @@ func conection(){
 	)
 	failOnError(err, "Failed to register a consumer")
 
+	//Hace unmarshalling del json recibido y calcula el balance
 	go func() {
 		for d := range msgs {
 			var respuesta Finan
