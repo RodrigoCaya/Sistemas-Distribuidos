@@ -29,7 +29,7 @@ func failOnError(err error, msg string) {
 
 func balancetotal(){
 	// Open the file
-	csvfile, err := os.Open("registro.csv")
+	csvfile, err := os.Open("csv/registro.csv")
 	if err != nil {
 		log.Fatalln("Couldn't open the csv file", err)
 	}
@@ -55,7 +55,7 @@ func balancetotal(){
 }
 
 func registrocsv(valor1 string, valor2 string, valor3 string, valor4 string){
-	path := "registro.csv"
+	path := "csv/registro.csv"
 	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
