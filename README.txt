@@ -37,6 +37,6 @@ Consideraciones generales:
 
 Consideraciones al ejecutar:
 
-	-Al ejecutar el cliente, este le pedirá el tipo de envío (pyme/retail) o ingresar una orden de seguimiento. Si desea hacer ambas al mismo tiempo debe abrir dos terminales.
+	-Al ejecutar el cliente, este le pedirá el tipo de envío (pyme/retail) o ingresar una orden de seguimiento.
 	-Al ejecutar camiones, este le pedira que ingrese la cantidad de tiempo tanto para la espera del segundo paquete como para el tiempo de envío.
 	*Todos los tiempos que se piden deben ser números enteros positivos.
